@@ -3,15 +3,10 @@ package com.example.finalapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
@@ -32,23 +27,23 @@ public class MainActivity extends AppCompatActivity {
             new NavigationBarView.OnItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                    Fragment selectedFragment = new Calendar();
+                    Fragment selectedFragment = new CalendarFrag();
 
                     switch (item.getItemId()){
                         case R.id.archive:
-                            selectedFragment = new Archive();
+                            selectedFragment = new ArchiveFrag();
                             break;
                         case R.id.reminder:
-                            selectedFragment = new Reminder();
+                            selectedFragment = new ReminderFrag();
                             break;
                         case R.id.calendar:
-                            selectedFragment = new Calendar();
+                            selectedFragment = new CalendarFrag();
                             break;
                         case R.id.countdown:
-                            selectedFragment = new Countdown();
+                            selectedFragment = new CountdownFrag();
                             break;
                         case R.id.map:
-                            selectedFragment = new Map();
+                            selectedFragment = new MapFrag();
                             break;
                     }
                     getSupportFragmentManager().beginTransaction().replace(R.id.nav_fragment,selectedFragment).commit();

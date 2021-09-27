@@ -7,27 +7,27 @@
 
     <fragment
         android:id="@+id/calendar"
-        android:name="com.example.finalapp.Calendar"
+        android:name="com.example.finalapp.CalendarFrag"
         android:label="fragment_calendar"
         tools:layout="@layout/fragment_calendar" />
     <fragment
         android:id="@+id/reminder"
-        android:name="com.example.finalapp.Reminder"
+        android:name="com.example.finalapp.ReminderFrag"
         android:label="fragment_reminder"
         tools:layout="@layout/fragment_reminder" />
     <fragment
         android:id="@+id/countdown"
-        android:name="com.example.finalapp.Countdown"
+        android:name="com.example.finalapp.CountdownFrag"
         android:label="fragment_countdown"
         tools:layout="@layout/fragment_countdown" />
     <fragment
         android:id="@+id/archive"
-        android:name="com.example.finalapp.Archive"
+        android:name="com.example.finalapp.ArchiveFrag"
         android:label="fragment_archive"
         tools:layout="@layout/fragment_archive" />
     <fragment
         android:id="@+id/map3"
-        android:name="com.example.finalapp.Map"
+        android:name="com.example.finalapp.MapFrag"
         android:label="fragment_map"
         tools:layout="@layout/fragment_map" />
 </navigation>
