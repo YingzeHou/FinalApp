@@ -8,15 +8,6 @@
     android:background="@drawable/calendar_bg"
     tools:context=".Calendar.CalendarFrag">
 
-<!--    <ImageView-->
-<!--        android:id="@+id/imageView"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:scaleType="fitXY"-->
-<!--        app:srcCompat="@drawable/calendar_bg"-->
-<!--        app:layout_constraintLeft_toLeftOf="@id/bottomNavigationView"-->
-<!--        app:layout_constraintBaseline_toBottomOf="@id/bottomNavigationView"/>-->
-
 
     <LinearLayout
         android:id="@+id/scheduleHeader"
