@@ -4,15 +4,17 @@ public class Event {
 
     private String eventName;
     private String colorCode;
+    private int weekDay;
     private String note;
     private String startTime;
     private String endTime;
     private String participant;
     private String location;
 
-    public Event(String eventName, String colorCode, String note, String startTime, String endTime, String participant, String location) {
+    public Event(String eventName, String colorCode, int weekDay, String note, String startTime, String endTime, String participant, String location) {
         this.eventName = eventName;
         this.colorCode = colorCode;
+        this.weekDay = weekDay;
         this.note = note;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -76,11 +78,20 @@ public class Event {
         this.location = location;
     }
 
+    public int getWeekDay() {
+        return weekDay;
+    }
+
+    public void setWeekDay(int weekDay) {
+        this.weekDay = weekDay;
+    }
+
     @Override
     public String toString() {
         return "Event{" +
                 "eventName='" + eventName + '\'' +
                 ", colorCode='" + colorCode + '\'' +
+                ", weekDay=" + weekDay +
                 ", note='" + note + '\'' +
                 ", startTime='" + startTime + '\'' +
                 ", endTime='" + endTime + '\'' +

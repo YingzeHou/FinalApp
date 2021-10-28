@@ -25,6 +25,7 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     -->
     <dimen name="widget_margin">8dp</dimen>
 
+    <dimen name="timeHeaderHeight">70dp</dimen>
     <dimen name="weekItemHeight">56dp</dimen>
     <dimen name="weekItemHeight_widget">48dp</dimen>
     <dimen name="weekItemMarTop">4dp</dimen>
