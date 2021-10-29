@@ -12,6 +12,7 @@ import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.finalapp.Calendar.dao.Event;
 import com.example.finalapp.Calendar.enums.DayOfWeek;
@@ -41,9 +43,6 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public class CalendarFrag extends Fragment {
-
-//    private final String[] DAY_IDS = new String[]{"sun","mon","tue","wed","thur","fri","sat"};
-//    private final String[] Day_TEXTS = new String[]{"Sun","Mon","Tue","Wed","Thur","Fri","Sat"};
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -123,8 +122,14 @@ public class CalendarFrag extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void setEventCard(ViewGroup viewGroup){
-        Event event1 = new Event("ECE352", "#89007E",1,"EE", "8:00","10:20","YZH","CS Building");
+        Event event1 = new Event("ECE352", "#89007E",5,"EE", "9:30","11:30","YZH","CS Building");
+        Event event2 = new Event("CS407", "#008089",3,"CS", "10:30","11:45","YZH","CS Building");
+        Event event3 = new Event("CS564", "#1F3B62",1,"CS", "8:00","9:15","YZH","CS Building");
+        Event event4 = new Event("ECE270", "#621F52",2,"EE", "9:30","10:45","YZH","CS Building");
         eventList.add(event1);
+        eventList.add(event2);
+        eventList.add(event3);
+        eventList.add(event4);
 
         for(Event event:eventList){
             setEventCardHelper(viewGroup,event);
@@ -152,37 +157,38 @@ public class CalendarFrag extends Fragment {
         Double timeSlotRatio = Math.abs(ChronoUnit.HOURS.between(endTime,startTime)+ChronoUnit.MINUTES.between(endTime,startTime)%60/Double.valueOf(60));
 
         // Get time start size needed
-        eventCard.setMinimumHeight((int) (getResources().getDimension(R.dimen.weekItemHeight)*timeSlotRatio));
-        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
-        layoutParams.setMargins(10, (int) (getResources().getDimension(R.dimen.timeHeaderHeight)),10,0);
+        LocalTime baseTime = LocalTime.of(8,0);
+        Double timeStartRatio = Math.abs(ChronoUnit.HOURS.between(startTime,baseTime)+ChronoUnit.MINUTES.between(startTime,baseTime)%60/Double.valueOf(60))+0.5;
+
+//        eventCard.setMinimumHeight((int) (getResources().getDimension(R.dimen.hourBlockHeight)*timeSlotRatio));
+        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,(int) (getResources().getDimension(R.dimen.hourBlockHeight)*timeSlotRatio));
+        layoutParams.setMargins(10, (int) ((int) getResources().getDimension(R.dimen.timeHeaderHeight)+getResources().getDimension(R.dimen.hourBlockHeight)*timeStartRatio),10,0);
 
         TextView eventText = new TextView(getContext());
-        eventText.setText(String.format("%s\n%s\n%s\n%s\n%s\n%s",event.getEventName(),event.getNote(),event.getStartTime(),event.getEndTime(),
-                event.getParticipant(),event.getLocation()));
-        eventText.setTextSize(12);
+        eventText.setText(String.format("%s\n\n%s\n%s\n%s",event.getEventName(),event.getLocation(),event.getStartTime(),event.getEndTime()));
+        eventText.setTextColor(getResources().getColor(R.color.white));
+        eventText.setTypeface(null, Typeface.BOLD);
+        eventText.setPadding(5,5,5,0);
+        eventText.setTextSize(10);
         eventText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         eventCard.addView(eventText);
         eventCard.setCardBackgroundColor(Color.parseColor(event.getColorCode()));
         eventCard.setRadius(30);
+        eventCard.setAlpha(0.8F);
         eventCard.setLayoutParams(layoutParams);
+        eventCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(),String.format(
+                        "Event Name: %s\n\nEvent Location: %s\n\nStart Time: %s\n\nEnd Time: " +
+                                "%s\n\nParticipant: %s\n\nNotes: %s",event.getEventName(),
+                        event.getLocation(),event.getStartTime(),event.getEndTime(),
+                        event.getParticipant(), event.getNote()),Toast.LENGTH_SHORT)
+                        .show();
+            }
+        });
         weekDayCol.addView(eventCard);
-
-//        LinearLayout weekDayCol = (LinearLayout) viewGroup.findViewById(R.id.weekPanel_1);
-//        CardView eventCard = new CardView(getContext());
-//        eventCard.setMinimumWidth(10);
-//        eventCard.setMinimumHeight((int) (getResources().getDimension(R.dimen.weekItemHeight)*1.2));
-//        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
-//        layoutParams.setMargins(10, (int) (70+1.5*(int) getResources().getDimension(R.dimen.weekItemHeight)),10,0);
-//
-//        TextView eventText = new TextView(getContext());
-//        eventText.setText(" Event1\nNew Try ");
-//        eventText.setTextSize(15);
-//        eventText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-//        eventCard.addView(eventText);
-//        eventCard.setLayoutParams(layoutParams);
-//        weekDayCol.addView(eventCard);
     }
-
 //    @Override
 //    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
 //        inflater.inflate(R.menu.calendar_menu, menu);
