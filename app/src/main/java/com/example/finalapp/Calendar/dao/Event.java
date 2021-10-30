@@ -1,6 +1,6 @@
 package com.example.finalapp.Calendar.dao;
 
-public class Event {
+public class Event implements Comparable<Event> {
 
     private String eventName;
     private String colorCode;
@@ -98,5 +98,22 @@ public class Event {
                 ", participant='" + participant + '\'' +
                 ", location='" + location + '\'' +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Event o) {
+        if(this.getWeekDay()<o.getWeekDay()){
+            return -1;
+        }
+        if(Integer.parseInt(this.getStartTime().split(":")[0])<
+                Integer.parseInt(o.getStartTime().split(":")[0])){
+            return -1;
+        }
+        if(Integer.parseInt(this.getStartTime().split(":")[1])<
+                Integer.parseInt(o.getStartTime().split(":")[1])){
+            return -1;
+        }
+        return 1;
+
     }
 }

@@ -34,6 +34,8 @@ import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -122,24 +124,43 @@ public class CalendarFrag extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void setEventCard(ViewGroup viewGroup){
+        Event event5 = new Event("ECE271", "#B67F1A",2,"EE", "11:30","12:45","YZH","CS Building");
         Event event1 = new Event("ECE352", "#89007E",5,"EE", "9:30","11:30","YZH","CS Building");
         Event event2 = new Event("CS407", "#008089",3,"CS", "10:30","11:45","YZH","CS Building");
         Event event3 = new Event("CS564", "#1F3B62",1,"CS", "8:00","9:15","YZH","CS Building");
         Event event4 = new Event("ECE270", "#621F52",2,"EE", "9:30","10:45","YZH","CS Building");
+
+        eventList.add(event5);
         eventList.add(event1);
         eventList.add(event2);
         eventList.add(event3);
         eventList.add(event4);
 
+        Collections.sort(eventList);
+
         for(Event event:eventList){
-            setEventCardHelper(viewGroup,event);
+            Event prevEvent = getPrevEvent(eventList,event);
+            setEventCardHelper(viewGroup,event, prevEvent);
+
         }
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private void setEventCardHelper(ViewGroup viewGroup, Event event){
+    private Event getPrevEvent(List<Event> eventList, Event event){
+        Event eventPrev = null;
+        for(Event event1:eventList) {
+            if (event1.equals(event)) {
+                return eventPrev;
+            }
+            else if(event1.getWeekDay()==event.getWeekDay()){
+                eventPrev=event1;
+            }
+        }
+        return eventPrev;
+    }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void setEventCardHelper(ViewGroup viewGroup, Event event, Event prevEvent){
         // Get Week Panel to draw
         int weekDay = event.getWeekDay();
         int weekPanelId = DayOfWeek.valueOf((weekDay+1)%7).getWeekPanelId();
@@ -157,12 +178,16 @@ public class CalendarFrag extends Fragment {
         Double timeSlotRatio = Math.abs(ChronoUnit.HOURS.between(endTime,startTime)+ChronoUnit.MINUTES.between(endTime,startTime)%60/Double.valueOf(60));
 
         // Get time start size needed
-        LocalTime baseTime = LocalTime.of(8,0);
-        Double timeStartRatio = Math.abs(ChronoUnit.HOURS.between(startTime,baseTime)+ChronoUnit.MINUTES.between(startTime,baseTime)%60/Double.valueOf(60))+0.5;
+        int baseHour = prevEvent==null?8: Integer.parseInt(prevEvent.getEndTime().split(":")[0]);
+        int baseMin = prevEvent==null?0: Integer.parseInt(prevEvent.getEndTime().split(":")[1]);
+        int isTop = prevEvent==null?1:0;
+        LocalTime baseTime = LocalTime.of(baseHour,baseMin);
+        Double timeStartRatio = prevEvent==null?
+                Math.abs(ChronoUnit.HOURS.between(startTime,baseTime)+ChronoUnit.MINUTES.between(startTime,baseTime)%60/Double.valueOf(60))+0.5:
+                Math.abs(ChronoUnit.HOURS.between(startTime,baseTime)+ChronoUnit.MINUTES.between(startTime,baseTime)%60/Double.valueOf(60));
 
-//        eventCard.setMinimumHeight((int) (getResources().getDimension(R.dimen.hourBlockHeight)*timeSlotRatio));
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,(int) (getResources().getDimension(R.dimen.hourBlockHeight)*timeSlotRatio));
-        layoutParams.setMargins(10, (int) ((int) getResources().getDimension(R.dimen.timeHeaderHeight)+getResources().getDimension(R.dimen.hourBlockHeight)*timeStartRatio),10,0);
+        layoutParams.setMargins(10, (int) ((int) getResources().getDimension(R.dimen.timeHeaderHeight)*isTop+getResources().getDimension(R.dimen.hourBlockHeight)*timeStartRatio),10,0);
 
         TextView eventText = new TextView(getContext());
         eventText.setText(String.format("%s\n\n%s\n%s\n%s",event.getEventName(),event.getLocation(),event.getStartTime(),event.getEndTime()));
@@ -174,7 +199,7 @@ public class CalendarFrag extends Fragment {
         eventCard.addView(eventText);
         eventCard.setCardBackgroundColor(Color.parseColor(event.getColorCode()));
         eventCard.setRadius(30);
-        eventCard.setAlpha(0.8F);
+        eventCard.setAlpha(0.75F);
         eventCard.setLayoutParams(layoutParams);
         eventCard.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -189,22 +214,4 @@ public class CalendarFrag extends Fragment {
         });
         weekDayCol.addView(eventCard);
     }
-//    @Override
-//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
-//        inflater.inflate(R.menu.calendar_menu, menu);
-//        super.onCreateOptionsMenu(menu, inflater);
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()){
-//            case R.id.calMenu_setting:
-//                return true;
-//            case R.id.calMenu_other:
-//                return true;
-//            default:
-//                return super.onOptionsItemSelected(item);
-//        }
-//    }
-
 }
