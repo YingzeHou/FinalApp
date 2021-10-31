@@ -9,5 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="brown">#FF481F00</color>
     <color name="wood">#FFC19A6B</color>
+    <color name="whitewood">#d3c9b7</color>
 
 </resources>

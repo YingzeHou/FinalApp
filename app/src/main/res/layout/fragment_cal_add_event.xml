@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/whitewood"
+    tools:context=".Calendar.CalAddEventFrag">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/goBackBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_back"
+            android:layout_margin="10dp"
+            android:background="#00FFFFFF"
+            android:backgroundTint="#00FFFFFF"
+            >
+
+        </ImageButton>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add Event"
+            android:textSize="20dp"
+            android:textAlignment="center"
+            android:layout_marginTop="8dp"
+            android:textStyle="bold"
+            android:fontFamily="serif">
+
+        </TextView>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_coursename"
+                android:layout_gravity="center_vertical">
+
+            </ImageView>
+            <EditText
+                android:id="@+id/eventName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Event Name"
+                android:inputType="text"
+                android:layout_marginLeft="@dimen/ic_editText_margin">
+
+            </EditText>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_colorpicker"
+                android:layout_gravity="center_vertical">
+
+            </ImageView>
+            <Button
+                android:id="@+id/colorPicker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Pick A Color"
+                android:textSize="18dp"
+                android:background="#00FFFFFF"
+                android:backgroundTint="#00FFFFFF"
+                android:layout_marginLeft="@dimen/ic_editText_margin">
+
+            </Button>
+            <View
+                android:id="@+id/preview_selected_color"
+                android:layout_width="50dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/ic_editText_margin"
+                android:background="@android:color/darker_gray"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_eventnote"
+                android:layout_gravity="center_vertical">
+
+            </ImageView>
+            <EditText
+                android:id="@+id/eventNote"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Take Some Note(Optional)"
+                android:inputType="text"
+                android:layout_marginLeft="@dimen/ic_editText_margin">
+
+            </EditText>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_eventparticipant"
+                android:layout_gravity="center_vertical">
+
+            </ImageView>
+            <EditText
+                android:id="@+id/eventParticipant"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Participant(Optional)"
+                android:inputType="text"
+                android:layout_marginLeft="@dimen/ic_editText_margin">
+
+            </EditText>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

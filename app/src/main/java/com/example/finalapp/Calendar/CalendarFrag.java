@@ -11,7 +11,11 @@ import android.os.Bundle;
 import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,8 +23,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -98,6 +105,30 @@ public class CalendarFrag extends Fragment {
         ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.fragment_calendar, container, false);
         setDateAndDay(viewGroup);
         setEventCard(viewGroup);
+        ImageButton calSettingBtn = (ImageButton) viewGroup.findViewById(R.id.calSetting);
+        ImageButton calAddEventBtn = (ImageButton) viewGroup.findViewById(R.id.addEvent);
+        calSettingBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("info","Click");
+                FragmentManager fragmentManager = getParentFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.setCustomAnimations(R.anim.nav_default_enter_anim,R.anim.nav_default_exit_anim);
+                Fragment fragment = new CalSettingFrag();
+                fragmentTransaction.replace(R.id.nav_fragment,fragment).commit();
+            }
+        });
+
+        calAddEventBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = getParentFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.setCustomAnimations(R.anim.nav_default_enter_anim,R.anim.nav_default_exit_anim);
+                Fragment fragment = new CalAddEventFrag();
+                fragmentTransaction.replace(R.id.nav_fragment,fragment).commit();
+            }
+        });
         return viewGroup;
     }
 
@@ -118,7 +149,7 @@ public class CalendarFrag extends Fragment {
         TextView dayView = (TextView) viewGroup.findViewById(day.getViewId());
         dayView.setText(day.getTextContent());
         dayView.setTextColor(getResources().getColor(R.color.brown));
-        dayView.setTypeface(null, Typeface.BOLD);
+        dayView.setTypeface(null, Typeface.BOLD_ITALIC);
 
     }
 
@@ -187,7 +218,7 @@ public class CalendarFrag extends Fragment {
                 Math.abs(ChronoUnit.HOURS.between(startTime,baseTime)+ChronoUnit.MINUTES.between(startTime,baseTime)%60/Double.valueOf(60));
 
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,(int) (getResources().getDimension(R.dimen.hourBlockHeight)*timeSlotRatio));
-        layoutParams.setMargins(10, (int) ((int) getResources().getDimension(R.dimen.timeHeaderHeight)*isTop+getResources().getDimension(R.dimen.hourBlockHeight)*timeStartRatio),10,0);
+        layoutParams.setMargins(10, (int) ((int) getResources().getDimension(R.dimen.hourBlockHeight)*timeStartRatio),10,0);
 
         TextView eventText = new TextView(getContext());
         eventText.setText(String.format("%s\n\n%s\n%s\n%s",event.getEventName(),event.getLocation(),event.getStartTime(),event.getEndTime()));
@@ -214,4 +245,5 @@ public class CalendarFrag extends Fragment {
         });
         weekDayCol.addView(eventCard);
     }
+
 }

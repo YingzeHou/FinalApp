@@ -1,39 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/frameLayout"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/paper_bg"
     tools:context=".Calendar.CalendarFrag">
-
 
     <LinearLayout
         android:id="@+id/scheduleHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center">
+        android:gravity="center_horizontal">
 
-        <LinearLayout
-        android:id="@+id/date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center">
 
-            <TextView
-                android:id="@+id/currDateView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:text="10/14/2021"
-                android:layout_weight="0.5"
-                android:textSize="25dp"
-                android:layout_marginTop="10dp"></TextView>
+        <TextView
+            android:id="@+id/currDateView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="10/14/2021"
+            android:layout_weight="0.5"
+            android:textSize="25dp"
+            android:layout_marginTop="10dp"
+            android:textAlignment="gravity"
+            android:layout_marginLeft="20dp">
 
-        </LinearLayout>
+        </TextView>
+        <ImageButton
+            android:id="@+id/calSetting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:background="#00FFFFFF"
+            android:backgroundTint="#00FFFFFF"
+            android:src="@drawable/ic_settings" />
+        <ImageButton
+            android:id="@+id/addEvent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="5dp"
+            android:background="#00FFFFFF"
+            android:backgroundTint="#00FFFFFF"
+            android:src="@drawable/ic_add_circle"/>
 
     </LinearLayout>
     <LinearLayout
@@ -41,7 +55,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="50sp"
         android:layout_marginLeft="30sp"
         >
 
@@ -136,8 +149,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
-                android:orientation="vertical"
-                android:layout_marginTop="@dimen/timeHeaderHeight">
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="fill_parent"
@@ -373,5 +385,6 @@
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
-</FrameLayout>
+
+</LinearLayout>
 

@@ -35,4 +35,5 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     <dimen name="grid_expected_size">120dp</dimen>
 
     <dimen name="time_size">12sp</dimen>
+    <dimen name="ic_editText_margin">5dp</dimen>
 </resources>
