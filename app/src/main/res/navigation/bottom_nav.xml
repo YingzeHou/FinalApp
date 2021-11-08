@@ -17,7 +17,7 @@
         tools:layout="@layout/fragment_reminder" />
     <fragment
         android:id="@+id/countdown"
-        android:name="com.example.finalapp.CountdownFrag"
+        android:name="com.example.finalapp.CountDown.CountdownFrag"
         android:label="fragment_countdown"
         tools:layout="@layout/fragment_countdown" />
     <fragment

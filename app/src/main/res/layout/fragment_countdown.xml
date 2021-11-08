@@ -18,7 +18,7 @@
         android:background="#00FFFFFF"
         android:backgroundTint="#00FFFFFF"
         android:src="@drawable/ic_add_circle"
-        android:text="+" />
+        android:onClick="clickFunction" />
 
     <ListView
         android:id="@+id/notesListView"
