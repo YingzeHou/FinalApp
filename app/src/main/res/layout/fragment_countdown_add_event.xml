@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/whitewood"
+    android:background="@drawable/paper_bg"
     tools:context=".Calendar.CalAddEventFrag">
 
     <!-- TODO: Update blank fragment layout -->
