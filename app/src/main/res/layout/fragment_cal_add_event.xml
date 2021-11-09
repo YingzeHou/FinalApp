@@ -10,7 +10,7 @@
     <!-- TODO: Update blank fragment layout -->
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
@@ -20,35 +20,60 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_arrow_back"
             android:layout_margin="10dp"
+            android:textAlignment="gravity"
             android:background="#00FFFFFF"
             android:backgroundTint="#00FFFFFF"
             >
 
         </ImageButton>
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Add Event"-->
+<!--            android:textSize="20dp"-->
+<!--            android:textAlignment="gravity"-->
+<!--            android:layout_marginTop="8dp"-->
+<!--            android:textStyle="bold"-->
+<!--            android:fontFamily="sans-serif-condensed">-->
+
+<!--        </TextView>-->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
             android:text="Add Event"
+            android:layout_weight="0.5"
             android:textSize="20dp"
-            android:textAlignment="center"
             android:layout_marginTop="8dp"
+            android:textAlignment="gravity"
             android:textStyle="bold"
-            android:fontFamily="serif">
+            android:fontFamily="sans-serif-condensed">
 
         </TextView>
+        <TextView
+            android:id="@+id/saveEvent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="save"
+            android:textSize="20dp"
+            android:layout_marginTop="8dp"
+            android:textAlignment="gravity"
+            android:layout_marginRight="@dimen/linearLayoutMargin"
+            android:textColor="@color/brown"
+            android:textStyle="bold"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="@dimen/linearLayoutMargin"
+        android:layout_marginRight="@dimen/linearLayoutMargin"
+        android:layout_marginLeft="@dimen/linearLayoutMargin">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp">
+            android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -61,7 +86,9 @@
                 android:id="@+id/eventName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/whitewood"
                 android:hint="Event Name"
+                android:textSize="@dimen/text_size"
                 android:inputType="text"
                 android:layout_marginLeft="@dimen/ic_editText_margin">
 
@@ -72,42 +99,40 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp">
+            android:layout_marginTop="@dimen/linearLayoutMargin">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_colorpicker"
+                android:src="@drawable/ic_colorize"
                 android:layout_gravity="center_vertical">
 
             </ImageView>
-            <Button
+            <TextView
                 android:id="@+id/colorPicker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="Pick A Color"
-                android:textSize="18dp"
+                android:hint=" Pick A Color"
+                android:textSize="@dimen/text_size"
                 android:background="#00FFFFFF"
                 android:backgroundTint="#00FFFFFF"
-                android:layout_marginLeft="@dimen/ic_editText_margin">
+                android:layout_marginLeft="10dp">
 
-            </Button>
+            </TextView>
             <View
                 android:id="@+id/preview_selected_color"
-                android:layout_width="50dp"
-                android:layout_height="20dp"
+                android:layout_width="100dp"
+                android:layout_height="25dp"
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/ic_editText_margin"
-                android:background="@android:color/darker_gray"/>
+                android:background="@android:color/darker_gray" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp">
+            android:layout_marginTop="@dimen/linearLayoutMargin">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -120,7 +145,9 @@
                 android:id="@+id/eventNote"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Take Some Note(Optional)"
+                android:hint="Take Some Note (Optional)"
+                android:background="@color/whitewood"
+                android:textSize="@dimen/text_size"
                 android:inputType="text"
                 android:layout_marginLeft="@dimen/ic_editText_margin">
 
@@ -131,8 +158,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp">
+            android:layout_marginTop="@dimen/linearLayoutMargin">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -145,7 +171,9 @@
                 android:id="@+id/eventParticipant"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Participant(Optional)"
+                android:hint="Participant (Optional)"
+                android:textSize="@dimen/text_size"
+                android:background="@color/whitewood"
                 android:inputType="text"
                 android:layout_marginLeft="@dimen/ic_editText_margin">
 
@@ -153,5 +181,110 @@
         </LinearLayout>
 
     </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#2E3700"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="@dimen/ic_editText_margin"
+        android:layout_marginRight="@dimen/ic_editText_margin"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/linearLayoutMargin"
+        android:layout_marginLeft="@dimen/linearLayoutMargin"
+        android:layout_marginRight="@dimen/linearLayoutMargin">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_weekday"
+                android:layout_gravity="center_vertical">
+
+            </ImageView>
+            <TextView
+                android:id="@+id/weekDay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="select day of week"
+                android:padding="10dp"
+                android:textSize="16dp"
+                android:drawablePadding="16dp"
+                android:layout_marginLeft="@dimen/ic_editText_margin"
+                android:drawableEnd="@drawable/ic_arrow_down"
+                android:background="#CACACA">
+
+            </TextView>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/linearLayoutMargin">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_time"
+                android:layout_gravity="center_vertical">
+
+            </ImageView>
+            <TextView
+                android:id="@+id/eventStartTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Start Time"
+                android:textSize="16dp"
+                android:textStyle="bold|italic"
+                android:padding="@dimen/time_size"
+                android:gravity="center"
+                android:layout_marginLeft="@dimen/ic_editText_margin"
+                android:background="@drawable/textview_border">
+
+            </TextView>
+            <TextView
+                android:id="@+id/eventEndTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="End Time"
+                android:textSize="16dp"
+                android:textStyle="bold|italic"
+                android:padding="@dimen/time_size"
+                android:gravity="center"
+                android:layout_marginLeft="@dimen/ic_editText_margin"
+                android:background="@drawable/textview_border">
+
+            </TextView>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/linearLayoutMargin">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_location"
+                android:layout_gravity="center_vertical">
+
+            </ImageView>
+            <EditText
+                android:id="@+id/eventLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/ic_editText_margin"
+                android:background="@color/whitewood"
+                android:hint="Event Location">
+
+            </EditText>
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

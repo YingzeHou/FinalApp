@@ -3,6 +3,7 @@ package com.example.finalapp.Calendar;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
@@ -16,6 +17,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -34,6 +36,7 @@ import android.widget.Toast;
 import com.example.finalapp.Calendar.dao.Event;
 import com.example.finalapp.Calendar.enums.DayOfWeek;
 import com.example.finalapp.R;
+import com.example.finalapp.utils.DBHelper;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -104,7 +107,7 @@ public class CalendarFrag extends Fragment {
         // Inflate the layout for this fragment
         ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.fragment_calendar, container, false);
         setDateAndDay(viewGroup);
-        setEventCard(viewGroup);
+        List<CardView> cardViewList = setEventCard(viewGroup);
         ImageButton calSettingBtn = (ImageButton) viewGroup.findViewById(R.id.calSetting);
         ImageButton calAddEventBtn = (ImageButton) viewGroup.findViewById(R.id.addEvent);
         calSettingBtn.setOnClickListener(new View.OnClickListener() {
@@ -115,7 +118,7 @@ public class CalendarFrag extends Fragment {
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.setCustomAnimations(R.anim.nav_default_enter_anim,R.anim.nav_default_exit_anim);
                 Fragment fragment = new CalSettingFrag();
-                fragmentTransaction.replace(R.id.nav_fragment,fragment).commit();
+                fragmentTransaction.replace(R.id.nav_fragment,fragment).addToBackStack(null).commit();
             }
         });
 
@@ -126,10 +129,36 @@ public class CalendarFrag extends Fragment {
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.setCustomAnimations(R.anim.nav_default_enter_anim,R.anim.nav_default_exit_anim);
                 Fragment fragment = new CalAddEventFrag();
-                fragmentTransaction.replace(R.id.nav_fragment,fragment).commit();
+                fragmentTransaction.replace(R.id.nav_fragment,fragment).addToBackStack(null).commit();
             }
         });
+        for(CardView c:cardViewList){
+            registerForContextMenu(c);
+        }
         return viewGroup;
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        // you can set menu header with title icon etc
+        MenuInflater inflater = getActivity().getMenuInflater();
+        inflater.inflate(R.menu.cal_popup_menu, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+
+        if (item.getItemId() == R.id.editEvent) {
+            return true;
+        }
+        if(item.getItemId() == R.id.delEvent){
+            Context context = getContext();
+            SQLiteDatabase sqLiteDatabase = context.openOrCreateDatabase("events", Context.MODE_PRIVATE, null);
+            DBHelper dbHelper = new DBHelper(sqLiteDatabase);
+            Toast.makeText(getContext(),"You selected"+item.getTitle(),Toast.LENGTH_SHORT).show();
+        }
+        return true;
     }
 
     public void setDateAndDay(ViewGroup viewGroup){
@@ -154,26 +183,33 @@ public class CalendarFrag extends Fragment {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public void setEventCard(ViewGroup viewGroup){
-        Event event5 = new Event("ECE271", "#B67F1A",2,"EE", "11:30","12:45","YZH","CS Building");
-        Event event1 = new Event("ECE352", "#89007E",5,"EE", "9:30","11:30","YZH","CS Building");
-        Event event2 = new Event("CS407", "#008089",3,"CS", "10:30","11:45","YZH","CS Building");
-        Event event3 = new Event("CS564", "#1F3B62",1,"CS", "8:00","9:15","YZH","CS Building");
-        Event event4 = new Event("ECE270", "#621F52",2,"EE", "9:30","10:45","YZH","CS Building");
+    public List<CardView> setEventCard(ViewGroup viewGroup){
+        List<CardView> cardViewList = new ArrayList<>();
+        Context context = getContext();
+        SQLiteDatabase sqLiteDatabase = context.openOrCreateDatabase("events", Context.MODE_PRIVATE,null);
 
-        eventList.add(event5);
-        eventList.add(event1);
-        eventList.add(event2);
-        eventList.add(event3);
-        eventList.add(event4);
+        DBHelper dbHelper = new DBHelper(sqLiteDatabase);
+        ArrayList<Event> eventList = dbHelper.readEvents();
+//        Event event5 = new Event("ECE271", "#B67F1A",2,"EE", "11:30","12:45","YZH","CS Building");
+//        Event event1 = new Event("ECE352", "#89007E",5,"EE", "9:30","11:30","YZH","CS Building");
+//        Event event2 = new Event("CS407", "#008089",3,"CS", "10:30","11:45","YZH","CS Building");
+//        Event event3 = new Event("CS564", "#1F3B62",1,"CS", "8:00","9:15","YZH","CS Building");
+//        Event event4 = new Event("ECE270", "#621F52",2,"EE", "9:30","10:45","YZH","CS Building");
+//
+//        eventList.add(event5);
+//        eventList.add(event1);
+//        eventList.add(event2);
+//        eventList.add(event3);
+//        eventList.add(event4);
 
         Collections.sort(eventList);
 
         for(Event event:eventList){
             Event prevEvent = getPrevEvent(eventList,event);
-            setEventCardHelper(viewGroup,event, prevEvent);
-
+            CardView cardView = setEventCardHelper(viewGroup,event, prevEvent);
+            cardViewList.add(cardView);
         }
+        return cardViewList;
 
     }
 
@@ -191,7 +227,7 @@ public class CalendarFrag extends Fragment {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void setEventCardHelper(ViewGroup viewGroup, Event event, Event prevEvent){
+    private CardView setEventCardHelper(ViewGroup viewGroup, Event event, Event prevEvent){
         // Get Week Panel to draw
         int weekDay = event.getWeekDay();
         int weekPanelId = DayOfWeek.valueOf((weekDay+1)%7).getWeekPanelId();
@@ -228,7 +264,7 @@ public class CalendarFrag extends Fragment {
         eventText.setTextSize(10);
         eventText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         eventCard.addView(eventText);
-        eventCard.setCardBackgroundColor(Color.parseColor(event.getColorCode()));
+        eventCard.setCardBackgroundColor(Integer.parseInt(event.getColorCode()));
         eventCard.setRadius(30);
         eventCard.setAlpha(0.75F);
         eventCard.setLayoutParams(layoutParams);
@@ -244,6 +280,7 @@ public class CalendarFrag extends Fragment {
             }
         });
         weekDayCol.addView(eventCard);
+        return eventCard;
     }
 
 }
