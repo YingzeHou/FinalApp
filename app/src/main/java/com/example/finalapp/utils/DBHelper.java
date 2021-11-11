@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.example.finalapp.Calendar.dao.Event;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class DBHelper {
 
@@ -65,5 +66,30 @@ public class DBHelper {
         createTable();
         sqLiteDatabase.execSQL(String.format("DELETE FROM events WHERE eventName='%s' AND startTime='%s' AND endTime='%s'",
                 name, start, end));
+    }
+
+    public List<Event> selectEvent(String name, String start, String end){
+        createTable();
+        Cursor c = sqLiteDatabase.rawQuery("SELECT * FROM events WHERE eventName=? AND startTime=? AND endTime=?",new String[]{name,start,end});
+        c.moveToFirst();
+        List<Event> eventList = new ArrayList<>();
+        while(!c.isAfterLast()) {
+            int colorInd = c.getColumnIndex("colorCode");
+            int dayInd = c.getColumnIndex("weekDay");
+            int noteInd = c.getColumnIndex("note");
+            int partInd = c.getColumnIndex("participant");
+            int locInd = c.getColumnIndex("location");
+
+            String colorCode = c.getString(colorInd);
+            int weekDay = c.getInt(dayInd);
+            String note = c.getString(noteInd);
+            String participant = c.getString(partInd);
+            String location = c.getString(locInd);
+
+            eventList.add(new Event(name,colorCode,weekDay,note,start,end,participant,location));
+            c.moveToNext();
+        }
+
+        return eventList;
     }
 }

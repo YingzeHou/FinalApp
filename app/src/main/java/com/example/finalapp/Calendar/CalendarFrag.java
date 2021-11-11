@@ -1,6 +1,8 @@
 package com.example.finalapp.Calendar;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
@@ -138,9 +140,11 @@ public class CalendarFrag extends Fragment {
         return viewGroup;
     }
 
+    CardView selectedView = null;
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
+        selectedView = (CardView) v;
         // you can set menu header with title icon etc
         MenuInflater inflater = getActivity().getMenuInflater();
         inflater.inflate(R.menu.cal_popup_menu, menu);
@@ -150,13 +154,53 @@ public class CalendarFrag extends Fragment {
     public boolean onContextItemSelected(MenuItem item) {
 
         if (item.getItemId() == R.id.editEvent) {
+            Bundle bundle = new Bundle();
+
+            TextView textView = selectedView==null?null: (TextView) selectedView.getChildAt(0);
+            String eventInfo = textView==null?null:
+                    textView.getText().toString().split("\n")[0]+"/"+
+                            textView.getText().toString().split("\n")[3]+"/"+
+                            textView.getText().toString().split("\n")[4];
+
+            bundle.putString("eventInfo", eventInfo);
+            FragmentManager fragmentManager = getParentFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.setCustomAnimations(R.anim.nav_default_enter_anim,R.anim.nav_default_exit_anim);
+            Fragment fragment = new CalAddEventFrag();
+            fragment.setArguments(bundle);
+            fragmentTransaction.replace(R.id.nav_fragment,fragment).addToBackStack(null).commit();
+
             return true;
         }
         if(item.getItemId() == R.id.delEvent){
             Context context = getContext();
             SQLiteDatabase sqLiteDatabase = context.openOrCreateDatabase("events", Context.MODE_PRIVATE, null);
             DBHelper dbHelper = new DBHelper(sqLiteDatabase);
-            Toast.makeText(getContext(),"You selected"+item.getTitle(),Toast.LENGTH_SHORT).show();
+            TextView textView = (TextView) selectedView.getChildAt(0);
+            String eventName = textView.getText().toString().split("\n")[0];
+            String startTime = textView.getText().toString().split("\n")[3];
+            String endTime = textView.getText().toString().split("\n")[4];
+            AlertDialog.Builder deleteConfirmation = new AlertDialog.Builder(getContext());
+            deleteConfirmation.setTitle("Do you want to delete this event?")
+                    .setMessage("Delete Confirmation")
+                    .setPositiveButton("delete", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dbHelper.deleteEvent(eventName,startTime,endTime);
+                            FragmentManager fragmentManager = getParentFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            fragmentTransaction.setCustomAnimations(R.anim.nav_default_enter_anim,R.anim.nav_default_exit_anim);
+                            Fragment fragment = new CalendarFrag();
+                            fragmentTransaction.replace(R.id.nav_fragment,fragment).commit();
+                        }
+                    })
+            .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+            deleteConfirmation.create().show();
         }
         return true;
     }

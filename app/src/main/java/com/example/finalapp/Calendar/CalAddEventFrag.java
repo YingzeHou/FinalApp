@@ -18,12 +18,14 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.finalapp.Calendar.dao.Event;
 import com.example.finalapp.R;
 import com.example.finalapp.utils.DBHelper;
 
@@ -61,6 +63,7 @@ public class CalAddEventFrag extends Fragment {
     String[] dayArray = {"Monday", "Tuesday", "Wednesday", "Thursday","Friday","Saturday", "Sunday"};
     private TextView startTimeView;
     private TextView endTimeView;
+    private boolean update=false;
 
     public CalAddEventFrag() {
         // Required empty public constructor
@@ -149,10 +152,50 @@ public class CalAddEventFrag extends Fragment {
         saveEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveEvent(view,mDefaultColor);
+                saveEvent(view,mDefaultColor, update);
             }
         });
+
+        if(getArguments()!=null){
+            update=true;
+            String eventInfo = getArguments().getString("eventInfo");
+            Context context = getContext();
+            SQLiteDatabase sqLiteDatabase = context.openOrCreateDatabase("events", Context.MODE_PRIVATE, null);
+            DBHelper dbHelper = new DBHelper(sqLiteDatabase);
+            List<Event> eventList = dbHelper.selectEvent(eventInfo.split("/")[0],
+                    eventInfo.split("/")[1], eventInfo.split("/")[2]);
+
+
+            setEventInfo(eventList,view);
+        }
         return view;
+    }
+
+    String prevName = "";
+    String prevStart = "";
+    String prevEnd = "";
+    private void setEventInfo(List<Event> eventList, View v){
+        String weekDays = "";
+        for(int i = 0; i<eventList.size(); i++){
+            if(i==0) {
+                ((EditText) v.findViewById(R.id.eventName)).setText(eventList.get(i).getEventName());
+                prevName = eventList.get(i).getEventName();
+                v.findViewById(R.id.preview_selected_color).setBackgroundColor(Integer.parseInt(eventList.get(i).getColorCode()));
+                mDefaultColor =Integer.parseInt(eventList.get(i).getColorCode());
+                ((EditText) v.findViewById(R.id.eventNote)).setText(eventList.get(i).getNote());
+                ((EditText) v.findViewById(R.id.eventParticipant)).setText(eventList.get(i).getParticipant());
+                ((TextView) v.findViewById(R.id.eventStartTime)).setText(eventList.get(i).getStartTime());
+                prevStart = eventList.get(i).getStartTime();
+                ((TextView) v.findViewById(R.id.eventEndTime)).setText(eventList.get(i).getEndTime());
+                prevEnd = eventList.get(i).getEndTime();
+                ((EditText) v.findViewById(R.id.eventLocation)).setText(eventList.get(i).getLocation());
+            }
+            weekDays+=dayArray[eventList.get(i).getWeekDay()-1];
+            if(i!=eventList.size()-1){
+                weekDays+=", ";
+            }
+        }
+        ((TextView) v.findViewById(R.id.weekDay)).setText(weekDays);
     }
 
     private void onClickColorPick(View v){
@@ -265,7 +308,7 @@ public class CalAddEventFrag extends Fragment {
         mTimePicker.show();
     }
 
-    public void saveEvent(View v, int mDefaultColor){
+    public void saveEvent(View v, int mDefaultColor, boolean update){
         EditText eventName = (EditText) v.findViewById(R.id.eventName);
         EditText eventNote = v.findViewById(R.id.eventNote);
         EditText eventParticipant = v.findViewById(R.id.eventParticipant);
@@ -291,8 +334,17 @@ public class CalAddEventFrag extends Fragment {
 
         DBHelper dbHelper = new DBHelper(sqLiteDatabase);
 
-        for(int d:weekDays){
-            dbHelper.saveEvent(eName,eColor,eNote,d,eStart,eEnd,eParticipant,eLocation);
+        if(!update) {
+            for(int d:weekDays){
+                dbHelper.saveEvent(eName,eColor,eNote,d,eStart,eEnd,eParticipant,eLocation);
+            }
+        }
+        else{
+            Toast.makeText(getContext(),"UPDATE", Toast.LENGTH_SHORT).show();
+            dbHelper.deleteEvent(prevName,prevStart,prevEnd);
+            for(int d:weekDays){
+                dbHelper.saveEvent(eName,eColor,eNote,d,eStart,eEnd,eParticipant,eLocation);
+            }
         }
         FragmentManager fragmentManager = getParentFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
