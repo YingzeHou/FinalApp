@@ -7,11 +7,11 @@
     android:id="@+id/reminder"
     android:background="@drawable/paper_bg"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ReminderFrag">
+    tools:context=".Reminder.ReminderFrag">
 
-    <Space
-        android:layout_width="0dp"
-        android:layout_height="15dp" />
+<!--    <Space-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="10dp" />-->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,9 +20,9 @@
         android:orientation="horizontal">
 
 
-        <Space
-            android:layout_width="10dp"
-            android:layout_height="0dp"/>
+<!--        <Space-->
+<!--            android:layout_width="5dp"-->
+<!--            android:layout_height="0dp"/>-->
 
         <TextView
             android:id="@+id/textView"
@@ -31,13 +31,16 @@
             android:text="To Do List"
             android:layout_gravity="center"
             android:textColor="@color/black"
-            android:textSize="24sp" />
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="2dp"
+            android:textSize="20sp" />
 
 
-        <Space
-            android:layout_width="190dp"
-            android:layout_height="0dp"
-            android:gravity="left" />
+<!--        <Space-->
+<!--            android:layout_width="190dp"-->
+<!--            android:layout_height="0dp"-->
+<!--            android:gravity="left" />-->
 
 
         <ImageButton
@@ -47,6 +50,10 @@
             android:background="#00FFFFFF"
             android:layout_gravity="center"
             android:backgroundTint="#00FFFFFF"
+            android:layout_marginLeft="210dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="2dp"
             android:onClick="onClickAddToDo"
             android:src="@drawable/ic_add_circle" />
         <!--        android:src="@drawable/ic_baseline_add_24"-->
@@ -60,49 +67,55 @@
         android:padding="10dp"
         android:layout_weight="0.06">
 
-        <LinearLayout
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/timeLineView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:layout_gravity="center">
+            app:lineOrientation="vertical" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="1:45 PM" />
+<!--        <LinearLayout-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:padding="10dp"-->
+<!--            android:layout_gravity="center">-->
 
-        </LinearLayout>
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="1:45 PM" />-->
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:layout_gravity="center">
+<!--        </LinearLayout>-->
 
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/ic_add_circle" />
+<!--        <LinearLayout-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:padding="10dp"-->
+<!--            android:layout_gravity="center">-->
 
-        </LinearLayout>
+<!--            <ImageView-->
+<!--                android:layout_width="30dp"-->
+<!--                android:layout_height="30dp"-->
+<!--                android:src="@drawable/ic_add_circle" />-->
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="10dp">
+<!--        </LinearLayout>-->
 
-<!--            <CardView-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent">-->
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:padding="10dp">-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:text="Hello there" />
-<!--            </CardView>-->
+<!--&lt;!&ndash;            <CardView&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_height="match_parent">&ndash;&gt;-->
 
-        </LinearLayout>
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:padding="10dp"-->
+<!--                    android:text="Hello there" />-->
+<!--&lt;!&ndash;            </CardView>&ndash;&gt;-->
+
+<!--        </LinearLayout>-->
 
     </LinearLayout>
 
@@ -112,13 +125,25 @@
         android:orientation="horizontal"
         android:gravity="center_horizontal">
 
-<!--        <androidx.recyclerview.widget.RecyclerView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="match_parent" />-->
-        <ListView
+        <SearchView
+            android:id="@+id/searchBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal">
+
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/notesListView"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="175dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_calendar" />
     <fragment
         android:id="@+id/reminder"
-        android:name="com.example.finalapp.ReminderFrag"
+        android:name="com.example.finalapp.Reminder.ReminderFrag"
         android:label="fragment_reminder"
         tools:layout="@layout/fragment_reminder" />
     <fragment

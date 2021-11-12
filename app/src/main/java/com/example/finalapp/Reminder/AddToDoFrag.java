@@ -1,4 +1,4 @@
-package com.example.finalapp;
+package com.example.finalapp.Reminder;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -16,6 +16,9 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TimePicker;
+
+import com.example.finalapp.R;
+import com.example.finalapp.Reminder.ReminderFrag;
 
 import java.util.Calendar;
 

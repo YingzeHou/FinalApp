@@ -10,6 +10,7 @@ import android.view.MenuItem;
 
 import com.example.finalapp.Calendar.CalendarFrag;
 import com.example.finalapp.CountDown.CountdownFrag;
+import com.example.finalapp.Reminder.ReminderFrag;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
