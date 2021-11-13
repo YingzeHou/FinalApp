@@ -13,19 +13,20 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
+        android:layout_marginLeft="5dp"
         android:layout_marginTop="15dp"
         android:layout_marginRight="20dp"
-        android:layout_marginLeft="5dp"
         android:background="#00FFFFFF"
         android:backgroundTint="#00FFFFFF"
-        android:src="@drawable/ic_add_circle"
-        android:onClick="clickFunction" />
+        android:onClick="clickFunction"
+        android:src="@drawable/ic_add_circle" />
 
-    <ListView
-        android:id="@+id/notesListView"
-        android:layout_width="409dp"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
         android:layout_height="667dp"
-        android:layout_below="@id/addEvent" />
+        android:layout_below="@id/addEvent"
+        android:layout_marginTop="20dp"/>
 
 
 </RelativeLayout>
