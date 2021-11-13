@@ -1,12 +1,16 @@
 package com.example.finalapp.CountDown;
 
-import android.graphics.Color;
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageButton;
 
 import androidx.fragment.app.Fragment;
@@ -14,6 +18,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.finalapp.R;
+
+import java.util.Calendar;
 
 import top.defaults.colorpicker.ColorPickerPopup;
 
@@ -28,6 +34,9 @@ public class CountdownAddEventFrag extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    Calendar c;
+    Button selectDate;
+    int year, month, dayOfMonth;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -65,7 +74,9 @@ public class CountdownAddEventFrag extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -84,6 +95,38 @@ public class CountdownAddEventFrag extends Fragment {
             }
         });
 
+        c = Calendar.getInstance();
+        selectDate = (Button) view.findViewById(R.id.selectDate);
+        selectDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickSelectDate(view);
+            }
+        });
+
+
         return view;
     }
+
+
+    public void onClickSelectDate(View view) {
+        year = c.get(Calendar.YEAR);
+        month = c.get(Calendar.MONTH);
+        dayOfMonth = c.get(Calendar.DAY_OF_MONTH);
+        DatePickerDialog.OnDateSetListener onDateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int selectedYear, int selectedMonth, int selectedDayOfMonth) {
+                year = selectedYear;
+                month = selectedMonth + 1;
+                dayOfMonth = selectedDayOfMonth;
+                selectDate.setText(String.format("%02d/%02d/%02d", month, dayOfMonth, year));
+            }
+        };
+        int style = AlertDialog.THEME_HOLO_LIGHT;
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this.getContext(), style, onDateSetListener, year, month, dayOfMonth);
+        datePickerDialog.setTitle("Select Date");
+        datePickerDialog.show();
+    }
+
+
 }
