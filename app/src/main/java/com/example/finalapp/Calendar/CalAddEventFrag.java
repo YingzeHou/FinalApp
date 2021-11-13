@@ -60,7 +60,7 @@ public class CalAddEventFrag extends Fragment {
     private TextView weekDaySelectView;
     boolean[] selected;
     ArrayList<Integer> dayList = new ArrayList<>();
-    String[] dayArray = {"Monday", "Tuesday", "Wednesday", "Thursday","Friday","Saturday", "Sunday"};
+    String[] dayArray = {"Monday", "Tuesday", "Wednesday", "Thursday","Friday"};
     private TextView startTimeView;
     private TextView endTimeView;
     private boolean update=false;
