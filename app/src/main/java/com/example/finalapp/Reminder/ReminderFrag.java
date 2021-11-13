@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ReminderFrag extends Fragment {
-
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;

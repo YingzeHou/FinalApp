@@ -1,7 +1,6 @@
 package com.example.finalapp.CountDown;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,6 +10,8 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -48,6 +49,12 @@ public class CountdownFrag extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     ImageButton addEventButton;
     private List<CountdownEvent> eventList = new ArrayList<>();
+
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager layoutManager;
+    private String[] myDataset;
+    private MyAdapter.MyViewHolder[] viewHolders;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -103,75 +110,37 @@ public class CountdownFrag extends Fragment {
             }
         });
 
+        recyclerView = (RecyclerView) view.findViewById(R.id.listView);
+        recyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(this.getContext());
+        recyclerView.setLayoutManager(layoutManager);
+
+        // specify an adapter (see also next example)
+        myDataset = new String[10];
+
+        viewHolders = new com.example.finalapp.CountDown.MyAdapter.MyViewHolder[10];
+
+        myDataset[0] = "10 days since event 1";
+        myDataset[1] = "20 days since event 2";
+        myDataset[2] = "30 days since event 3";
+        myDataset[3] = "40 days since event 4";
+        myDataset[4] = "50 days since event 5";
+        myDataset[5] = "60 days since event 6";
+        myDataset[6] = "70 days since event 7";
+        myDataset[7] = "80 days since event 8";
+        myDataset[8] = "90 days since event 9";
+        myDataset[9] = "100 days since event 10";
+        mAdapter = new com.example.finalapp.CountDown.MyAdapter(myDataset);
+
+        for (int i = 0; i < 10; i++) {
+            viewHolders[i] = (com.example.finalapp.CountDown.MyAdapter.MyViewHolder) mAdapter.onCreateViewHolder(recyclerView, 1);
+            mAdapter.onBindViewHolder(viewHolders[i], i);
+        }
+
+        recyclerView.setAdapter(mAdapter);
+
         return view;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public void setEventCard(ViewGroup viewGroup){
-        CountdownEvent event1 = new CountdownEvent("Enroll in CS407", "01/01/2000", true);
-        CountdownEvent event2 = new CountdownEvent("CS407 exam", "12/12/2021", false);
-
-
-        eventList.add(event1);
-        eventList.add(event2);
-
-        Collections.sort(eventList);
-
-        for(CountdownEvent event:eventList){
-            CountdownEvent prevEvent = getPrevEvent(eventList,event);
-            setEventCardHelper(viewGroup,event, prevEvent);
-        }
-
-    }
-
-    private CountdownEvent getPrevEvent(List<CountdownEvent> eventList, CountdownEvent event){
-        CountdownEvent eventPrev = null;
-        for(CountdownEvent event1:eventList) {
-            if (event1.equals(event)) {
-                return eventPrev;
-            }
-            else if(event1.getDate()==event.getDate()){
-                eventPrev=event1;
-            }
-        }
-        return eventPrev;
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private void setEventCardHelper(ViewGroup viewGroup, CountdownEvent event, CountdownEvent prevEvent) {
-
-        // Instantiate event card
-        CardView eventCard = new CardView(getContext());
-        eventCard.setMinimumWidth(10);
-
-        // Get date
-        LocalDate date = LocalDate.of(Integer.valueOf(event.getDate().split(":")[0]),
-                Integer.valueOf(event.getDate().split(":")[1]),
-                Integer.valueOf(event.getDate().split(":")[2]));
-
-        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, (int) (getResources().getDimension(R.dimen.hourBlockHeight)));
-        layoutParams.setMargins(10, (int) ((int) getResources().getDimension(R.dimen.hourBlockHeight)), 10, 0);
-
-        TextView eventText = new TextView(getContext());
-        eventText.setText(String.format("%s\n\n%s", event.getEventName(), event.getDate()));
-        eventText.setTextColor(getResources().getColor(R.color.white));
-        eventText.setTypeface(null, Typeface.BOLD);
-        eventText.setPadding(5, 5, 5, 0);
-        eventText.setTextSize(10);
-        eventText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-        eventCard.addView(eventText);
-        eventCard.setRadius(30);
-        eventCard.setAlpha(0.75F);
-        eventCard.setLayoutParams(layoutParams);
-//        eventCard.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(getContext(),String.format(
-//                        "Event Name: %s\n\nEvent Date: %s\n\n",event.getEventName(),
-//                        event.getDate(),Toast.LENGTH_SHORT)
-//                        .show());
-//            }
-//        });
-    }
 
 }

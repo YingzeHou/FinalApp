@@ -2,6 +2,7 @@ package com.example.finalapp.CountDown;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import android.view.LayoutInflater;
@@ -16,8 +17,12 @@ import android.widget.ImageButton;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.finalapp.Calendar.dao.CountdownEvent;
 import com.example.finalapp.R;
+import com.example.finalapp.CountDown.MyAdapter;
 
 import java.util.Calendar;
 
@@ -38,12 +43,10 @@ public class CountdownAddEventFrag extends Fragment {
     Button selectDate;
     int year, month, dayOfMonth;
 
+
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
-    private int mDefaultColor;
-    private View myColorPreview;
 
     public CountdownAddEventFrag() {
         // Required empty public constructor
@@ -77,7 +80,6 @@ public class CountdownAddEventFrag extends Fragment {
 
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -85,6 +87,18 @@ public class CountdownAddEventFrag extends Fragment {
         View view = inflater.inflate(R.layout.fragment_countdown_add_event, container, false);
         ImageButton goBackBtn = view.findViewById(R.id.goBackBtn);
         goBackBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = getParentFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.setCustomAnimations(R.anim.nav_default_enter_anim,R.anim.nav_default_exit_anim);
+                Fragment fragment = new CountdownFrag();
+                fragmentTransaction.replace(R.id.nav_fragment,fragment).commit();
+            }
+        });
+
+        Button saveButton = view.findViewById(R.id.saveButton);
+        saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentManager fragmentManager = getParentFragmentManager();
