@@ -264,6 +264,7 @@
             </TextView>
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/toSearch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -277,6 +278,7 @@
 
             </ImageView>
             <EditText
+                android:focusable="false"
                 android:id="@+id/eventLocation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

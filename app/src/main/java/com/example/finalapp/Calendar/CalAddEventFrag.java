@@ -10,12 +10,16 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -64,7 +68,7 @@ public class CalAddEventFrag extends Fragment {
     private TextView startTimeView;
     private TextView endTimeView;
     private boolean update=false;
-
+    String place="";
     public CalAddEventFrag() {
         // Required empty public constructor
     }
@@ -156,18 +160,38 @@ public class CalAddEventFrag extends Fragment {
             }
         });
 
+        LinearLayout toSearch=view.findViewById(R.id.toSearch);
+        toSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getContext(),MapActivity.class));
+            }
+        });
+        EditText eventLocation=view.findViewById(R.id.eventLocation);
+        eventLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getContext(),MapActivity.class));
+            }
+        });
         if(getArguments()!=null){
             update=true;
             String eventInfo = getArguments().getString("eventInfo");
-            Context context = getContext();
-            SQLiteDatabase sqLiteDatabase = context.openOrCreateDatabase("events", Context.MODE_PRIVATE, null);
-            DBHelper dbHelper = new DBHelper(sqLiteDatabase);
-            List<Event> eventList = dbHelper.selectEvent(eventInfo.split("/")[0],
-                    eventInfo.split("/")[1], eventInfo.split("/")[2]);
+            if(!TextUtils.isEmpty(eventInfo)){
+                Context context = getContext();
+                SQLiteDatabase sqLiteDatabase = context.openOrCreateDatabase("events", Context.MODE_PRIVATE, null);
+                DBHelper dbHelper = new DBHelper(sqLiteDatabase);
+                List<Event> eventList = dbHelper.selectEvent(eventInfo.split("/")[0],
+                        eventInfo.split("/")[1], eventInfo.split("/")[2]);
+                setEventInfo(eventList,view);
+            }
 
-
-            setEventInfo(eventList,view);
+            place=getArguments().getString("data");
+            if(!TextUtils.isEmpty(place)){
+                eventLocation.setText(place);
+            }
         }
+
         return view;
     }
 
