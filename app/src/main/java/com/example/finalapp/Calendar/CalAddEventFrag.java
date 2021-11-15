@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -32,6 +33,8 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.finalapp.Calendar.dao.Event;
 import com.example.finalapp.R;
 import com.example.finalapp.utils.DBHelper;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
 
 import org.w3c.dom.Text;
 
@@ -175,15 +178,17 @@ public class CalAddEventFrag extends Fragment {
             }
         });
         if(getArguments()!=null){
-            update=true;
-            String eventInfo = getArguments().getString("eventInfo");
-            if(!TextUtils.isEmpty(eventInfo)){
-                Context context = getContext();
-                SQLiteDatabase sqLiteDatabase = context.openOrCreateDatabase("events", Context.MODE_PRIVATE, null);
-                DBHelper dbHelper = new DBHelper(sqLiteDatabase);
-                List<Event> eventList = dbHelper.selectEvent(eventInfo.split("/")[0],
-                        eventInfo.split("/")[1], eventInfo.split("/")[2]);
-                setEventInfo(eventList,view);
+            if(getArguments().getString("eventInfo")!=null) {
+                update = true;
+                String eventInfo = getArguments().getString("eventInfo");
+                if (!TextUtils.isEmpty(eventInfo)) {
+                    Context context = getContext();
+                    SQLiteDatabase sqLiteDatabase = context.openOrCreateDatabase("events", Context.MODE_PRIVATE, null);
+                    DBHelper dbHelper = new DBHelper(sqLiteDatabase);
+                    List<Event> eventList = dbHelper.selectEvent(eventInfo.split("/")[0],
+                            eventInfo.split("/")[1], eventInfo.split("/")[2]);
+                    setEventInfo(eventList, view);
+                }
             }
 
             place=getArguments().getString("data");
@@ -194,6 +199,7 @@ public class CalAddEventFrag extends Fragment {
 
         return view;
     }
+
 
     String prevName = "";
     String prevStart = "";

@@ -15,11 +15,10 @@ import com.example.finalapp.Calendar.dao.Event;
 import com.example.finalapp.utils.DBHelper;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-
-import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -43,9 +42,9 @@ public class MapFrag extends Fragment {
         DBHelper dbHelper = new DBHelper(sqLiteDatabase);
         ArrayList<Event> eventList = dbHelper.readEvents();
         Collections.sort(eventList);
-        initData();
+        initData(eventList);
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getParentFragmentManager().findFragmentById(R.id.fragment_map);
+        SupportMapFragment mapFragment =  (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(googleMap -> {
             mMap = googleMap;
             for(LatLng latLng: mDestinationLatLngList){
@@ -55,11 +54,11 @@ public class MapFrag extends Fragment {
         });
         return view;
     }
-    private void initData(){
+    private void initData(List<Event> eventList){
         for(Event event:eventList){
             String colorCode=event.getColorCode();
             String location=event.getLocation();
-            String[] splits=location.split("-");
+            String[] splits=location.split("_");
             colors.add(colorCode);
             locations.add(splits[0]);
             LatLng mDestinationLatLng=new LatLng(Double.parseDouble(splits[1]), Double.parseDouble(splits[2]));

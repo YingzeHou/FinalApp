@@ -41,7 +41,7 @@ public class MapActivity extends AppCompatActivity {
                 fragmentTransaction.setCustomAnimations(R.anim.nav_default_enter_anim,R.anim.nav_default_exit_anim);
                 Fragment fragment = new CalAddEventFrag();
                 Bundle bundle = new Bundle();
-                bundle.putString("data",place.getName()+"-"+place.getLatLng().latitude+""+place.getLatLng().longitude);
+                bundle.putString("data",place.getName()+"_"+place.getLatLng().latitude+"_"+place.getLatLng().longitude);
                 fragment.setArguments(bundle);//数据传递到fragment中
                 fragmentTransaction.replace(R.id.container,fragment).commit();
             }
