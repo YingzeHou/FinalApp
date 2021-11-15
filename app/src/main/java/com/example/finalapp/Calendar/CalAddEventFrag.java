@@ -5,6 +5,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -70,6 +71,7 @@ public class CalAddEventFrag extends Fragment {
     String[] dayArray = {"Monday", "Tuesday", "Wednesday", "Thursday","Friday"};
     private TextView startTimeView;
     private TextView endTimeView;
+    public EditText eventLocation;
     private boolean update=false;
     String place="";
     public CalAddEventFrag() {
@@ -103,6 +105,10 @@ public class CalAddEventFrag extends Fragment {
         }
     }
 
+//    SharedPreferences sharedPreferences = getContext().getSharedPreferences("com.example.finalapp.Calendar", Context.MODE_PRIVATE);
+//    if(!sharedPreferences.get("location","").equals("")){
+//        eventLocation.setText(sharedPreferences.getString("location", ""));
+//    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -163,18 +169,31 @@ public class CalAddEventFrag extends Fragment {
             }
         });
 
-        LinearLayout toSearch=view.findViewById(R.id.toSearch);
-        toSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getContext(),MapActivity.class));
-            }
-        });
-        EditText eventLocation=view.findViewById(R.id.eventLocation);
+//        LinearLayout toSearch=view.findViewById(R.id.toSearch);
+//        toSearch.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+////                startActivity(new Intent(getContext(),MapActivity.class));
+//                FragmentManager fragmentManager = getParentFragmentManager();
+//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                fragmentTransaction.setCustomAnimations(R.anim.nav_default_enter_anim,R.anim.nav_default_exit_anim);
+//                fragmentTransaction.addToBackStack(null);
+//                Fragment fragment = new ChooseLocFrag();
+//                fragmentTransaction.replace(R.id.nav_fragment,fragment).commit();
+//            }
+//        });
+        eventLocation=view.findViewById(R.id.eventLocation);
         eventLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getContext(),MapActivity.class));
+                Toast.makeText(getContext(),"Choose Location", Toast.LENGTH_SHORT).show();
+//                startActivity(new Intent(getContext(),MapActivity.class));
+                FragmentManager fragmentManager = getParentFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.setCustomAnimations(R.anim.nav_default_enter_anim,R.anim.nav_default_exit_anim);
+                fragmentTransaction.addToBackStack(null);
+                Fragment fragment = new ChooseLocFrag();
+                fragmentTransaction.add(R.id.nav_fragment,fragment).commit();
             }
         });
         if(getArguments()!=null){
@@ -347,7 +366,14 @@ public class CalAddEventFrag extends Fragment {
         TextView eventStart = v.findViewById(R.id.eventStartTime);
         TextView eventEnd = v.findViewById(R.id.eventEndTime);
 
-        String eName = eventName.getText().toString();
+        String eName = "";
+        if(TextUtils.isEmpty(eventName.getText())) {
+            eventName.setError("Please Input A Event Name");
+            return;
+        }
+        else{
+            eName = eventName.getText().toString();
+        }
         String eNote = eventNote.getText()==null? "": eventNote.getText().toString();
         String eParticipant = eventParticipant.getText()==null?"":eventParticipant.getText().toString();
         String eLocation = eventLocation.getText()==null?"":eventLocation.getText().toString();

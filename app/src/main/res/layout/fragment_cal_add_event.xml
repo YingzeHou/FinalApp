@@ -189,6 +189,9 @@
         android:layout_marginLeft="@dimen/ic_editText_margin"
         android:layout_marginRight="@dimen/ic_editText_margin"/>
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -289,4 +292,5 @@
             </EditText>
         </LinearLayout>
     </LinearLayout>
+    </ScrollView>
 </LinearLayout>

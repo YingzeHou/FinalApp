@@ -3,12 +3,13 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/choose_loc"
     android:orientation="vertical">
     <fragment
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/fragment_map"
+        android:id="@+id/map_choose"
         android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment" />
 </LinearLayout>
 

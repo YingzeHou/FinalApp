@@ -10,7 +10,9 @@
     <color name="brown">#FF481F00</color>
     <color name="wood">#FFC19A6B</color>
     <color name="whitewood">#d3c9b7</color>
+    <color name="redwood">#834842</color>
     <color name="colorAccent">#2962FF</color>
     <color name="colorGrey50">#fafafa</color>
+
 
 </resources>

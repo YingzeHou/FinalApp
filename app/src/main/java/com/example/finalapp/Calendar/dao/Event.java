@@ -1,5 +1,7 @@
 package com.example.finalapp.Calendar.dao;
 
+import androidx.annotation.NonNull;
+
 public class Event implements Comparable<Event> {
 
     private String eventName;
