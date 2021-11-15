@@ -18,7 +18,7 @@ public class DBHelper {
     public void createTable(){
         sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS events"+
                 "(id INTEGER PRIMARY KEY, eventName TEXT, colorCode TEXT, weekDay INTEGER, note TEXT, " +
-                "startTime TEXT, endTime TEXT, participant TEXT, location TEXT)");
+                "startTime TEXT, endTime TEXT, participant TEXT, location TEXT, room TEXT)");
     }
 
     public ArrayList<Event> readEvents(){
@@ -33,6 +33,7 @@ public class DBHelper {
         int endInd = c.getColumnIndex("endTime");
         int partInd = c.getColumnIndex("participant");
         int locInd = c.getColumnIndex("location");
+        int roomInd = c.getColumnIndex("room");
 
         c.moveToFirst();
         ArrayList<Event> eventList = new ArrayList<>();
@@ -46,8 +47,9 @@ public class DBHelper {
             String eEnd = c.getString(endInd);
             String ePart = c.getString(partInd);
             String eLoc = c.getString(locInd);
+            String eRoom = c.getString(roomInd);
 
-            Event event = new Event(eName,eColor,eDay,eNote,eStart,eEnd,ePart,eLoc);
+            Event event = new Event(eName,eColor,eDay,eNote,eStart,eEnd,ePart,eLoc, eRoom);
             eventList.add(event);
             c.moveToNext();
         }
@@ -56,10 +58,10 @@ public class DBHelper {
         return eventList;
     }
 
-    public void saveEvent(String name, String color, String note, int day, String start, String end, String part, String loc){
+    public void saveEvent(String name, String color, String note, int day, String start, String end, String part, String loc, String room){
         createTable();
-        sqLiteDatabase.execSQL(String.format("INSERT INTO events (eventName, colorCode, weekDay, note, startTime, endTime, participant, location)"+
-                "VALUES('%s', '%s', '%d', '%s', '%s', '%s', '%s', '%s')", name,color,day,note,start,end,part,loc));
+        sqLiteDatabase.execSQL(String.format("INSERT INTO events (eventName, colorCode, weekDay, note, startTime, endTime, participant, location, room)"+
+                "VALUES('%s', '%s', '%d', '%s', '%s', '%s', '%s', '%s', '%s')", name,color,day,note,start,end,part,loc, room));
     }
 
     public void deleteEvent(String name, String start, String end){
@@ -79,14 +81,16 @@ public class DBHelper {
             int noteInd = c.getColumnIndex("note");
             int partInd = c.getColumnIndex("participant");
             int locInd = c.getColumnIndex("location");
+            int roomInd = c.getColumnIndex("room");
 
             String colorCode = c.getString(colorInd);
             int weekDay = c.getInt(dayInd);
             String note = c.getString(noteInd);
             String participant = c.getString(partInd);
             String location = c.getString(locInd);
+            String room = c.getString(roomInd);
 
-            eventList.add(new Event(name,colorCode,weekDay,note,start,end,participant,location));
+            eventList.add(new Event(name,colorCode,weekDay,note,start,end,participant,location, room));
             c.moveToNext();
         }
 

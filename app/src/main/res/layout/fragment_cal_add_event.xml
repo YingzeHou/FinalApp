@@ -62,6 +62,9 @@
             android:textColor="@color/brown"
             android:textStyle="bold"/>
     </LinearLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -180,25 +183,20 @@
             </EditText>
         </LinearLayout>
 
-    </LinearLayout>
-    <View
+        <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#2E3700"
         android:layout_marginTop="30dp"
         android:layout_marginLeft="@dimen/ic_editText_margin"
         android:layout_marginRight="@dimen/ic_editText_margin"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="@dimen/ic_editText_margin"
+            android:layout_marginRight="@dimen/ic_editText_margin"/>
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="@dimen/linearLayoutMargin"
-        android:layout_marginLeft="@dimen/linearLayoutMargin"
-        android:layout_marginRight="@dimen/linearLayoutMargin">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -243,7 +241,7 @@
                 android:id="@+id/eventStartTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Start Time"
+                android:hint="Start Time"
                 android:textSize="16dp"
                 android:textStyle="bold|italic"
                 android:padding="@dimen/time_size"
@@ -256,7 +254,7 @@
                 android:id="@+id/eventEndTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="End Time"
+                android:hint="End Time"
                 android:textSize="16dp"
                 android:textStyle="bold|italic"
                 android:padding="@dimen/time_size"
@@ -291,6 +289,37 @@
 
             </EditText>
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/linearLayoutMargin">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_room"
+                android:layout_gravity="center_vertical">
+
+            </ImageView>
+            <EditText
+                android:id="@+id/eventRoom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Room/Apt"
+                android:textSize="@dimen/text_size"
+                android:background="@color/whitewood"
+                android:inputType="text"
+                android:layout_marginLeft="@dimen/ic_editText_margin">
+
+            </EditText>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="@dimen/ic_editText_margin"
+            android:layout_marginRight="@dimen/ic_editText_margin"/>
     </LinearLayout>
     </ScrollView>
 </LinearLayout>

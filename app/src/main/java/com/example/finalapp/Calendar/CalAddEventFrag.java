@@ -362,13 +362,18 @@ public class CalAddEventFrag extends Fragment {
         EditText eventNote = v.findViewById(R.id.eventNote);
         EditText eventParticipant = v.findViewById(R.id.eventParticipant);
         EditText eventLocation = v.findViewById(R.id.eventLocation);
+        EditText eventRoom = v.findViewById(R.id.eventRoom);
         TextView eventWeekdays = v.findViewById(R.id.weekDay);
         TextView eventStart = v.findViewById(R.id.eventStartTime);
         TextView eventEnd = v.findViewById(R.id.eventEndTime);
 
         String eName = "";
+        String eStart = "";
+        String eEnd = "";
+        List<Integer> weekDays;
         if(TextUtils.isEmpty(eventName.getText())) {
-            eventName.setError("Please Input A Event Name");
+            Toast.makeText(getContext(),"Please Input Event Name",Toast.LENGTH_SHORT).show();
+            eventName.setError("Please Input Event Name");
             return;
         }
         else{
@@ -377,12 +382,35 @@ public class CalAddEventFrag extends Fragment {
         String eNote = eventNote.getText()==null? "": eventNote.getText().toString();
         String eParticipant = eventParticipant.getText()==null?"":eventParticipant.getText().toString();
         String eLocation = eventLocation.getText()==null?"":eventLocation.getText().toString();
+        String eRoom = eventRoom.getText()==null?"":eventRoom.getText().toString();
 
-        String eStart = eventStart.getText().toString();
-        String eEnd = eventEnd.getText().toString();
+        if(TextUtils.isEmpty(eventStart.getText())) {
+            Toast.makeText(getContext(),"Please Input Start Time",Toast.LENGTH_SHORT).show();
+            eventStart.setError("Please Input Start Time");
+            return;
+        }
+        else{
+            eStart = eventStart.getText().toString();
+        }
+        if(TextUtils.isEmpty(eventEnd.getText())) {
+            Toast.makeText(getContext(),"Please Input End Time",Toast.LENGTH_SHORT).show();
+            eventEnd.setError("Please Input End Time");
+            return;
+        }
+        else{
+            eEnd = eventEnd.getText().toString();
+        }
 
         String[] weekDaysList = eventWeekdays.getText().toString().split(", ");
-        List<Integer> weekDays =getWeekDays(weekDaysList);
+
+        if(TextUtils.isEmpty(eventWeekdays.getText())){
+            Toast.makeText(getContext(),"Please Input Week Days",Toast.LENGTH_SHORT).show();
+            eventWeekdays.setError("Please Input Week Days");
+            return;
+        }
+        else {
+            weekDays = getWeekDays(weekDaysList);
+        }
         String eColor = String.valueOf(mDefaultColor);
 
         Context context = getContext();
@@ -392,14 +420,14 @@ public class CalAddEventFrag extends Fragment {
 
         if(!update) {
             for(int d:weekDays){
-                dbHelper.saveEvent(eName,eColor,eNote,d,eStart,eEnd,eParticipant,eLocation);
+                dbHelper.saveEvent(eName,eColor,eNote,d,eStart,eEnd,eParticipant,eLocation, eRoom);
             }
         }
         else{
             Toast.makeText(getContext(),"UPDATE", Toast.LENGTH_SHORT).show();
             dbHelper.deleteEvent(prevName,prevStart,prevEnd);
             for(int d:weekDays){
-                dbHelper.saveEvent(eName,eColor,eNote,d,eStart,eEnd,eParticipant,eLocation);
+                dbHelper.saveEvent(eName,eColor,eNote,d,eStart,eEnd,eParticipant,eLocation, eRoom);
             }
         }
         FragmentManager fragmentManager = getParentFragmentManager();

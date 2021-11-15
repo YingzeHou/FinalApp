@@ -88,15 +88,9 @@ public class ChooseLocFrag extends Fragment {
                 FragmentManager fragmentManager = getParentFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.setCustomAnimations(R.anim.nav_default_enter_anim,R.anim.nav_default_exit_anim);
-//                Fragment fragment = new CalAddEventFrag();
-//                Bundle bundle = new Bundle();
-//                bundle.putString("data",place.getName()+"_"+place.getLatLng().latitude+"_"+place.getLatLng().longitude);
-//                fragment.setArguments(bundle);//数据传递到fragment中
 
-                System.out.println("SAVE");
-//                sharedPreferences.edit().putString("location",place.getName()+"_"+place.getLatLng().latitude+"_"+place.getLatLng().longitude).apply();
                 CalAddEventFrag frag = (CalAddEventFrag) fragmentManager.getFragments().get(0);
-                frag.eventLocation.setText(place.getName()+"_"+place.getLatLng().latitude+"_"+place.getLatLng().longitude);
+                frag.eventLocation.setText(place.getName());
                 fragmentManager.popBackStack();
             }
             @Override

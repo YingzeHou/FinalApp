@@ -12,8 +12,10 @@ public class Event implements Comparable<Event> {
     private String endTime;
     private String participant;
     private String location;
+    private String room;
 
-    public Event(String eventName, String colorCode, int weekDay, String note, String startTime, String endTime, String participant, String location) {
+    public Event(String eventName, String colorCode, int weekDay, String note, String startTime,
+                 String endTime, String participant, String location, String room) {
         this.eventName = eventName;
         this.colorCode = colorCode;
         this.weekDay = weekDay;
@@ -22,6 +24,7 @@ public class Event implements Comparable<Event> {
         this.endTime = endTime;
         this.participant = participant;
         this.location = location;
+        this.room = room;
     }
 
     public String getEventName() {
@@ -80,6 +83,14 @@ public class Event implements Comparable<Event> {
         this.location = location;
     }
 
+    public String getRoom() {
+        return room;
+    }
+
+    public void setRoom(String room) {
+        this.room = room;
+    }
+
     public int getWeekDay() {
         return weekDay;
     }
@@ -99,6 +110,7 @@ public class Event implements Comparable<Event> {
                 ", endTime='" + endTime + '\'' +
                 ", participant='" + participant + '\'' +
                 ", location='" + location + '\'' +
+                ", room='" + room + '\'' +
                 '}';
     }
 
