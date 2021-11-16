@@ -38,31 +38,31 @@ public class MapFrag extends Fragment {
         // Inflate the layout for this fragment
         view=inflater.inflate(R.layout.fragment_map, container, false);
 
-        SQLiteDatabase sqLiteDatabase = getActivity().openOrCreateDatabase("events", Context.MODE_PRIVATE, null);
-        DBHelper dbHelper = new DBHelper(sqLiteDatabase);
-        ArrayList<Event> eventList = dbHelper.readEvents();
-        Collections.sort(eventList);
-        initData(eventList);
-
-        SupportMapFragment mapFragment =  (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(googleMap -> {
-            mMap = googleMap;
-            for(LatLng latLng: mDestinationLatLngList){
-                googleMap.addMarker(new MarkerOptions().position(latLng));
-            }
-            googleMap.moveCamera(CameraUpdateFactory.newLatLng(mDestinationLatLngList.get(0)));
-        });
+//        SQLiteDatabase sqLiteDatabase = getActivity().openOrCreateDatabase("events", Context.MODE_PRIVATE, null);
+//        DBHelper dbHelper = new DBHelper(sqLiteDatabase);
+//        ArrayList<Event> eventList = dbHelper.readEvents();
+//        Collections.sort(eventList);
+//        initData(eventList);
+//
+//        SupportMapFragment mapFragment =  (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+//        mapFragment.getMapAsync(googleMap -> {
+//            mMap = googleMap;
+//            for(LatLng latLng: mDestinationLatLngList){
+//                googleMap.addMarker(new MarkerOptions().position(latLng));
+//            }
+//            googleMap.moveCamera(CameraUpdateFactory.newLatLng(mDestinationLatLngList.get(0)));
+//        });
         return view;
     }
-    private void initData(List<Event> eventList){
-        for(Event event:eventList){
-            String colorCode=event.getColorCode();
-            String location=event.getLocation();
-            String[] splits=location.split("_");
-            colors.add(colorCode);
-            locations.add(splits[0]);
-            LatLng mDestinationLatLng=new LatLng(Double.parseDouble(splits[1]), Double.parseDouble(splits[2]));
-            mDestinationLatLngList.add(mDestinationLatLng);
-        }
-    }
+//    private void initData(List<Event> eventList){
+//        for(Event event:eventList){
+//            String colorCode=event.getColorCode();
+//            String location=event.getLocation();
+//            String[] splits=location.split("_");
+//            colors.add(colorCode);
+//            locations.add(splits[0]);
+//            LatLng mDestinationLatLng=new LatLng(Double.parseDouble(splits[1]), Double.parseDouble(splits[2]));
+//            mDestinationLatLngList.add(mDestinationLatLng);
+//        }
+//    }
 }

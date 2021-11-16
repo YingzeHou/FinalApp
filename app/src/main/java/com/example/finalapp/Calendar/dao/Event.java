@@ -2,6 +2,10 @@ package com.example.finalapp.Calendar.dao;
 
 import androidx.annotation.NonNull;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Event implements Comparable<Event> {
 
     private String eventName;
@@ -116,18 +120,26 @@ public class Event implements Comparable<Event> {
 
     @Override
     public int compareTo(Event o) {
-        if(this.getWeekDay()<o.getWeekDay()){
-            return -1;
+        if(Integer.parseInt(this.getStartTime().split(":")[0])>=Integer.parseInt(o.getStartTime().split(":")[0])){
+            return 1;
         }
-        if(Integer.parseInt(this.getStartTime().split(":")[0])<
-                Integer.parseInt(o.getStartTime().split(":")[0])){
-            return -1;
-        }
-        if(Integer.parseInt(this.getStartTime().split(":")[1])<
-                Integer.parseInt(o.getStartTime().split(":")[1])){
-            return -1;
-        }
-        return 1;
+        return -1;
+//        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+//        Date d1 = null;
+//        try {
+//            d1 = sdf.parse(this.getStartTime());
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        Date d2 = null;
+//        try {
+//            d2 = sdf.parse(this.getEndTime());
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        int elapsed = (int) d2.getTime() - (int)d1.getTime();
+//
+//        return elapsed;
 
     }
 }
