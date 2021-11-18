@@ -68,28 +68,6 @@ public class ReminderFrag extends Fragment {
 //        listView.setAdapter(adapter);
 
 
-        timeLineModelList = new ArrayList<>();
-        int size = name.length;
-        timeLineModel = new TimeLineModel[size];
-        context = this.getContext();
-        linearLayoutManager = new LinearLayoutManager(this.getContext());
-
-        for (int i = 0; i < size; i++) {
-            timeLineModel[i] = new TimeLineModel();
-            timeLineModel[i].setName(name[i]);
-            timeLineModel[i].setStatus(status[i]);
-            timeLineModel[i].setDescription(description[i]);
-            timeLineModel[i].setTime(time[i]);
-            timeLineModel[i].setAddress("CS407\n@CS Building 1240");
-            timeLineModelList.add(timeLineModel[i]);
-        }
-        timeLineRecyclerView = (RecyclerView) view.findViewById(R.id.timeLineView);
-        timeLineRecyclerView.setLayoutManager(linearLayoutManager);
-//        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(timeLineRecyclerView.getContext(), linearLayoutManager.getOrientation());
-//        timeLineRecyclerView.addItemDecoration(dividerItemDecoration);  //for divider
-        timeLineRecyclerView.setAdapter(new TimeLineAdapter(context, timeLineModelList));
-
-
         Context context = this.getContext().getApplicationContext();
         SQLiteDatabase sqLiteDatabase = context.openOrCreateDatabase("todos", Context.MODE_PRIVATE,null);
         DBHelper dbHelper = new DBHelper(sqLiteDatabase);
@@ -127,6 +105,40 @@ public class ReminderFrag extends Fragment {
         }
 
         recyclerView.setAdapter(mAdapter);
+
+
+
+        timeLineModelList = new ArrayList<>();
+//        int size = name.length;
+        int size = todos.size();
+        timeLineModel = new TimeLineModel[size];
+        context = this.getContext();
+        linearLayoutManager = new LinearLayoutManager(this.getContext());
+
+        for (int i = 0; i < size; i++) {
+            timeLineModel[i] = new TimeLineModel();
+            Todo todo = todos.get(i);
+//            timeLineModel[i].setName(name[i]);
+            timeLineModel[i].setName(String.format("Todo%d", i + 1));
+//            timeLineModel[i].setStatus(status[i]);
+            timeLineModel[i].setStatus("active");
+//            timeLineModel[i].setDescription(description[i]);
+            timeLineModel[i].setDescription(todo.getContent());
+//            timeLineModel[i].setTime(time[i]);
+            timeLineModel[i].setTime(todo.getTime());
+            timeLineModel[i].setAddress("CS407\n@CS Building 1240");
+            timeLineModelList.add(timeLineModel[i]);
+        }
+        timeLineRecyclerView = (RecyclerView) view.findViewById(R.id.timeLineView);
+        timeLineRecyclerView.setLayoutManager(linearLayoutManager);
+//        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(timeLineRecyclerView.getContext(), linearLayoutManager.getOrientation());
+//        timeLineRecyclerView.addItemDecoration(dividerItemDecoration);  //for divider
+        timeLineRecyclerView.setAdapter(new TimeLineAdapter(context, timeLineModelList));
+
+
+
+
+
 
         SearchView searchView = view.findViewById(R.id.searchBar);
         searchView.setBackgroundColor(Color.rgb(163,201,192));
