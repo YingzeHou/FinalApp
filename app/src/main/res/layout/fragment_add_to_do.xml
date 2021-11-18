@@ -49,12 +49,22 @@
             android:textStyle="bold"
             android:fontFamily="sans-serif-condensed" />
 
-
+        <TextView
+            android:id="@+id/saveTodo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="save"
+            android:textSize="20dp"
+            android:layout_marginTop="8dp"
+            android:textAlignment="gravity"
+            android:layout_marginRight="@dimen/linearLayoutMargin"
+            android:textColor="@color/brown"
+            android:textStyle="bold"/>
     </LinearLayout>
 
     <Space
         android:layout_width="0dp"
-        android:layout_height="50dp" />
+        android:layout_height="80dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -89,6 +99,10 @@
 
     </LinearLayout>
 
+    <Space
+        android:layout_width="0dp"
+        android:layout_height="15dp" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -108,21 +122,26 @@
             android:layout_width="30dp"
             android:layout_height="0dp" />
 
-        <EditText
+        <TextView
             android:id="@+id/selectDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="20"
-
             android:hint="Pick the date"
+            android:textStyle="bold|italic"
             android:textSize="15dp"
-            android:inputType="textPersonName"
+            android:padding="10dp"
             android:text=""
-            android:textColor="@color/black" />
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:background="@drawable/textview_border"/>
+<!--        android:ems="20"-->
 <!--        android:onClick="onClickSelectDate"-->
 
-
     </LinearLayout>
+
+    <Space
+        android:layout_width="0dp"
+        android:layout_height="15dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -143,39 +162,40 @@
             android:layout_width="30dp"
             android:layout_height="0dp" />
 
-        <EditText
+        <TextView
             android:id="@+id/selectTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="20"
-
             android:hint="Pick the time"
             android:textSize="15dp"
-            android:inputType="textPersonName"
+            android:padding="10dp"
+            android:textStyle="bold|italic"
             android:text=""
-            android:textColor="@color/black" />
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:background="@drawable/textview_border"/>
+<!--        android:ems="20"-->
 <!--        android:onClick="onClickSelectTime"-->
 
-
     </LinearLayout>
 
-    <Space
-        android:layout_width="0dp"
-        android:layout_height="50dp" />
+<!--    <Space-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="50dp" />-->
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal">
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:gravity="center_horizontal"-->
+<!--        android:orientation="horizontal">-->
 
-        <Button
-            android:id="@+id/saveButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="SAVE" />
+<!--        <Button-->
+<!--            android:id="@+id/saveButton"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="SAVE" />-->
 
-    </LinearLayout>
+<!--    </LinearLayout>-->
 
     <!--    <Space-->
     <!--        android:layout_width="0dp"-->

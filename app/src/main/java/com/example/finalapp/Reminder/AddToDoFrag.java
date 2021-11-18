@@ -3,6 +3,8 @@ package com.example.finalapp.Reminder;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -15,17 +17,24 @@ import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.example.finalapp.R;
 import com.example.finalapp.Reminder.ReminderFrag;
 
+import org.w3c.dom.Text;
+
 import java.util.Calendar;
 
 public class AddToDoFrag extends Fragment {
 
-    EditText selectDate;
-    EditText selectTime;
+//    EditText selectDate;
+//    EditText selectTime;
+    TextView selectDate;
+    TextView selectTime;
+    EditText content;
+    TextView saveTodo;
     int hour, minute;
     int year, month, dayOfMonth;
     Calendar c;
@@ -50,9 +59,13 @@ public class AddToDoFrag extends Fragment {
                 fragmentTransaction.replace(R.id.nav_fragment,fragment).commit();
             }
         });
-        c = Calendar.getInstance();
-        selectDate = (EditText) view.findViewById(R.id.selectDate);
-        selectTime = (EditText) view.findViewById(R.id.selectTime);
+//        c = Calendar.getInstance();
+//        selectDate = (EditText) view.findViewById(R.id.selectDate);
+//        selectTime = (EditText) view.findViewById(R.id.selectTime);
+        content = (EditText) view.findViewById(R.id.editContent);
+        saveTodo = (TextView) view.findViewById(R.id.saveTodo);
+        selectDate = (TextView) view.findViewById(R.id.selectDate);
+        selectTime = (TextView) view.findViewById(R.id.selectTime);
         selectDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -65,12 +78,18 @@ public class AddToDoFrag extends Fragment {
                 onClickSelectTime(view);
             }
         });
-
+        saveTodo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickSaveTodo(view);
+            }
+        });
 
         return view;
     }
 
     public void onClickSelectDate(View view) {
+        c = Calendar.getInstance();
         year = c.get(Calendar.YEAR);
         month = c.get(Calendar.MONTH);
         dayOfMonth = c.get(Calendar.DAY_OF_MONTH);
@@ -90,6 +109,7 @@ public class AddToDoFrag extends Fragment {
     }
 
     public void onClickSelectTime(View view) {
+        c = Calendar.getInstance();
         hour = c.get(Calendar.HOUR);
         minute = c.get(Calendar.MINUTE);
         TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
@@ -104,5 +124,18 @@ public class AddToDoFrag extends Fragment {
         TimePickerDialog timePickerDialog = new TimePickerDialog(this.getContext(), style, onTimeSetListener, hour, minute, true);
         timePickerDialog.setTitle("Select Time");
         timePickerDialog.show();
+    }
+
+    public void onClickSaveTodo(View view) {
+        Context context = this.getContext().getApplicationContext();
+        SQLiteDatabase sqLiteDatabase = context.openOrCreateDatabase("todos", Context.MODE_PRIVATE,null);
+        DBHelper dbHelper = new DBHelper(sqLiteDatabase);
+        dbHelper.saveTodos(content.getText().toString(), selectDate.getText().toString(), selectTime.getText().toString());
+
+        FragmentManager fragmentManager = getParentFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.nav_default_enter_anim,R.anim.nav_default_exit_anim);
+        Fragment fragment = new ReminderFrag();
+        fragmentTransaction.replace(R.id.nav_fragment,fragment).commit();
     }
 }

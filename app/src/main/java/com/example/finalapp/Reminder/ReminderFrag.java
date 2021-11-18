@@ -1,6 +1,7 @@
 package com.example.finalapp.Reminder;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -28,6 +29,8 @@ public class ReminderFrag extends Fragment {
     private String[] myDataset;
     private MyAdapter.MyViewHolder[] viewHolders;
 
+    public static ArrayList<Todo> todos = new ArrayList<>();
+
     private RecyclerView timeLineRecyclerView;
     String[] name = {"Event 1", "Event 2", "Event 3"};
     String[] status = {"active", "inactive", "inactive"};
@@ -43,7 +46,7 @@ public class ReminderFrag extends Fragment {
         // Required empty public constructor
     }
 
-    ArrayList<Todo> todos = new ArrayList<>();
+//    ArrayList<Todo> todos = new ArrayList<>();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -63,6 +66,7 @@ public class ReminderFrag extends Fragment {
 //        ArrayAdapter adapter = new ArrayAdapter(this.getContext(), android.R.layout.simple_list_item_activated_1, displayNotes);
 //        ListView listView = (ListView) view.findViewById(R.id.notesListView);
 //        listView.setAdapter(adapter);
+
 
         timeLineModelList = new ArrayList<>();
         int size = name.length;
@@ -86,6 +90,11 @@ public class ReminderFrag extends Fragment {
         timeLineRecyclerView.setAdapter(new TimeLineAdapter(context, timeLineModelList));
 
 
+        Context context = this.getContext().getApplicationContext();
+        SQLiteDatabase sqLiteDatabase = context.openOrCreateDatabase("todos", Context.MODE_PRIVATE,null);
+        DBHelper dbHelper = new DBHelper(sqLiteDatabase);
+//        dbHelper.clearDatabase();
+        todos = dbHelper.readTodos();
 
         recyclerView = (RecyclerView) view.findViewById(R.id.notesListView);
 
@@ -98,19 +107,21 @@ public class ReminderFrag extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
 
         // specify an adapter (see also next example)
-        myDataset = new String[5];
+        myDataset = new String[todos.size()];
 
-        viewHolders = new MyAdapter.MyViewHolder[5];
+        viewHolders = new MyAdapter.MyViewHolder[todos.size()];
 
-
-        myDataset[0] = "1. Go to Mendota";
-        myDataset[1] = "2. Write 407";
-        myDataset[2] = "3. Review Material";
-        myDataset[3] = "4. Buy some mushroom";
-        myDataset[4] = "5. Continue develop reminder";
+        for (int i = 0; i < todos.size(); i++) {
+            myDataset[i] = String.format("%d. %s", i + 1, todos.get(i).getContent());
+        }
+//        myDataset[0] = "1. Go to Mendota";
+//        myDataset[1] = "2. Write 407";
+//        myDataset[2] = "3. Review Material";
+//        myDataset[3] = "4. Buy some mushroom";
+//        myDataset[4] = "5. Continue develop reminder";
         mAdapter = new MyAdapter(myDataset);
 
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < todos.size(); i++) {
             viewHolders[i] = (MyAdapter.MyViewHolder) mAdapter.onCreateViewHolder(recyclerView, 1);
             mAdapter.onBindViewHolder(viewHolders[i], i);
         }
