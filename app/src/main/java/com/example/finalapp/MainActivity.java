@@ -3,20 +3,37 @@ package com.example.finalapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import com.example.finalapp.Calendar.CalendarFrag;
 import com.example.finalapp.CountDown.CountdownFrag;
 import com.example.finalapp.Reminder.ReminderFrag;
+import com.example.finalapp.utils.NotificationReceiver;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
     BottomNavigationView bottomNavigationView;
+    private Calendar calendar;
+    private AlarmManager alarmManager;
+    private PendingIntent pendingIntent;
+    private NotificationManagerCompat notificationManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,6 +43,26 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navigationView = findViewById(R.id.bottomNavigationView);
         navigationView.setSelectedItemId(R.id.calendar);
         navigationView.setOnItemSelectedListener(listener);
+    }
+
+    public void setAlarm(String eventStart){
+        int hour = Integer.parseInt(eventStart.split(":")[0]);
+        int minute = Integer.parseInt(eventStart.split(":")[1]);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE,minute);
+        calendar.set(Calendar.SECOND,0);
+        calendar.set(Calendar.MILLISECOND,0);
+
+        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, NotificationReceiver.class);
+        final int id = (int) System.currentTimeMillis();
+        pendingIntent = PendingIntent.getBroadcast(this,id,intent,0);
+        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                60*1000,pendingIntent);
+
+        Toast.makeText(this, "Alarm set", Toast.LENGTH_SHORT).show();
     }
 
     private NavigationBarView.OnItemSelectedListener listener =
@@ -55,4 +92,6 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 }
             };
+
+
 }

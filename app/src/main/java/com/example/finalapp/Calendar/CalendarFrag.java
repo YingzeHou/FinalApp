@@ -1,6 +1,9 @@
 package com.example.finalapp.Calendar;
 
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,6 +16,8 @@ import android.os.Bundle;
 
 import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -35,10 +40,13 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.finalapp.App;
 import com.example.finalapp.Calendar.dao.Event;
 import com.example.finalapp.Calendar.enums.DayOfWeek;
 import com.example.finalapp.R;
 import com.example.finalapp.utils.DBHelper;
+import com.example.finalapp.utils.NotificationReceiver;
+import com.google.android.material.tabs.TabItem;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -62,6 +70,7 @@ public class CalendarFrag extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private NotificationManagerCompat notificationManager;
 
     private List<Event> eventList = new ArrayList<>();
 
@@ -140,6 +149,18 @@ public class CalendarFrag extends Fragment {
         return viewGroup;
     }
 
+    public void sendNotification(View v){
+        Toast.makeText(getContext(),"Send", Toast.LENGTH_SHORT).show();
+        Notification notification = new NotificationCompat.Builder(getActivity(), App.CHANNEL_1_ID)
+                .setSmallIcon(R.drawable.ic_notifications)
+                .setContentTitle("Event Alarm")
+                .setContentText("event alarm here!")
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .build();
+        notificationManager = NotificationManagerCompat.from(getActivity());
+        notificationManager.notify(1, notification);
+    }
     CardView selectedView = null;
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {

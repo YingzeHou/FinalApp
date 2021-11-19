@@ -1,6 +1,8 @@
 package com.example.finalapp.Calendar;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -32,8 +34,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.finalapp.Calendar.dao.Event;
+import com.example.finalapp.MainActivity;
 import com.example.finalapp.R;
 import com.example.finalapp.utils.DBHelper;
+import com.example.finalapp.utils.NotificationReceiver;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 
@@ -43,7 +47,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import top.defaults.colorpicker.ColorPickerPopup;
 
@@ -74,6 +80,10 @@ public class CalAddEventFrag extends Fragment {
     public EditText eventLocation;
     private boolean update=false;
     String place="";
+
+    private AlarmManager alarmManager;
+    private PendingIntent pendingIntent;
+
     public CalAddEventFrag() {
         // Required empty public constructor
     }
@@ -411,6 +421,9 @@ public class CalAddEventFrag extends Fragment {
         else {
             weekDays = getWeekDays(weekDaysList);
         }
+
+        MainActivity mainActivity = (MainActivity) getActivity();
+        mainActivity.setAlarm(eventStart.getText().toString());
         String eColor = String.valueOf(mDefaultColor);
 
         Context context = getContext();
