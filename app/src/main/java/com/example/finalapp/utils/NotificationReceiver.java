@@ -6,7 +6,9 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
+import android.text.TextUtils;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
@@ -23,19 +25,45 @@ public class NotificationReceiver extends BroadcastReceiver {
 
         String eventName = intent.getStringExtra("eventName");
         String eventLocation = intent.getStringExtra("eventLocation");
-        Intent calIntent = new Intent(context, MainActivity.class);
-//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context,0,calIntent,0);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, App.CHANNEL_1_ID)
-                .setSmallIcon(R.drawable.ic_notifications)
-                .setContentTitle(eventName+" in 10 minutes")
-                .setContentText("@ "+eventLocation)
-                .setAutoCancel(true)
-                .setDefaults(NotificationCompat.DEFAULT_ALL)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setContentIntent(pendingIntent);
+        int id = intent.getIntExtra("alarmId",0);
+        if(!TextUtils.isEmpty(eventLocation)){
+            Intent calIntent = new Intent(context, MainActivity.class);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context,id,calIntent,0);
 
-        NotificationManagerCompat managerCompat = NotificationManagerCompat.from(context);
-        managerCompat.notify(1, builder.build());
+            Intent navIntent = new Intent(context, NavigationReceiver.class);
+            navIntent.putExtra("location", eventLocation);
+            PendingIntent pendingNavigation = PendingIntent.getBroadcast(context, id, navIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            @SuppressLint("NotificationTrampoline") NotificationCompat.Builder builder = new NotificationCompat.Builder(context, App.CHANNEL_1_ID)
+                    .setSmallIcon(R.drawable.ic_notifications)
+                    .setContentTitle(eventName+" in 10 minutes")
+                    .setContentText("@ "+eventLocation.split(",")[0])
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                    .setColor(Color.BLUE)
+                    .setContentIntent(pendingIntent)
+                    .setAutoCancel(true)
+                    .setOnlyAlertOnce(true)
+                    .addAction(R.mipmap.ic_launcher,"Navigation",pendingNavigation);
+
+            NotificationManagerCompat managerCompat = NotificationManagerCompat.from(context);
+            managerCompat.notify(1, builder.build());
+        }
+        else{
+            Intent calIntent = new Intent(context, MainActivity.class);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context,id,calIntent,0);
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, App.CHANNEL_1_ID)
+                    .setSmallIcon(R.drawable.ic_notifications)
+                    .setContentTitle(eventName+" in 10 minutes")
+                    .setAutoCancel(true)
+                    .setDefaults(NotificationCompat.DEFAULT_ALL)
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .setContentIntent(pendingIntent);
+
+            NotificationManagerCompat managerCompat = NotificationManagerCompat.from(context);
+            managerCompat.notify(1, builder.build());
+        }
     }
 }

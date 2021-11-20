@@ -425,6 +425,10 @@ public class CalAddEventFrag extends Fragment {
         }
         else{
             Toast.makeText(getContext(),"UPDATE", Toast.LENGTH_SHORT).show();
+            List<Event> eventList = dbHelper.selectEvent(prevName,prevStart,prevEnd);
+            for(Event e:eventList){
+                mainActivity.cancelAlarm(e);
+            }
             dbHelper.deleteEvent(prevName,prevStart,prevEnd);
             for(int d:weekDays){
                 int alarmId = mainActivity.setAlarm(eventStart.getText().toString(), d, eName, eLocation);

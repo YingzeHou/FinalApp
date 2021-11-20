@@ -13,6 +13,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -49,9 +50,9 @@ public class MainActivity extends AppCompatActivity {
     public int setAlarm(String eventStart, Integer weekDay, String eventName, String eventLocation){
         int hour = Integer.parseInt(eventStart.split(":")[0]);
         int minute = Integer.parseInt(eventStart.split(":")[1]);
-
+//        weekDay%7==0?1:weekDay%7+1
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.DATE, weekDay%7==0?1:weekDay%7+1);
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
         hour = minute<10?hour-1:hour;
         minute = minute<10?(60-(minute-10)):minute-10;
         calendar.set(Calendar.HOUR_OF_DAY, hour);
@@ -64,21 +65,24 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("eventName", eventName);
         intent.putExtra("eventLocation", eventLocation);
         final int id = (int) System.currentTimeMillis();
-        pendingIntent = PendingIntent.getBroadcast(this,id,intent,0);
+        intent.putExtra("alarmId",id);
+        pendingIntent = PendingIntent.getBroadcast(this,id,intent,PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                 24 * 60 * 60 * 1000,pendingIntent);
 
-        Toast.makeText(this, "Alarm set for "+calendar.get(Calendar.DAY_OF_WEEK), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Alarm set for "+id, Toast.LENGTH_SHORT).show();
 
         return id;
     }
 
     public void cancelAlarm(Event event){
+        int id = event.getAlarmId();
         Intent intent = new Intent(this, NotificationReceiver.class);
-        pendingIntent = PendingIntent.getBroadcast(this,event.getAlarmId(),intent,0);
+        pendingIntent = PendingIntent.getBroadcast(this,id,intent,PendingIntent.FLAG_UPDATE_CURRENT);
         if(alarmManager==null){
             alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         }
+        System.out.println(alarmManager.toString());
         alarmManager.cancel(pendingIntent);
         Toast.makeText(this,"Alarm Cancel for "+ event.getEventName()+" on "+event.getWeekDay(),Toast.LENGTH_SHORT).show();
     }

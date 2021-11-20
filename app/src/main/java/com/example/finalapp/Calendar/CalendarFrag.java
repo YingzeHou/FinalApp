@@ -32,6 +32,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Gravity;
@@ -166,19 +167,6 @@ public class CalendarFrag extends Fragment {
         }
         return viewGroup;
     }
-
-    public void sendNotification(View v){
-        Toast.makeText(getContext(),"Send", Toast.LENGTH_SHORT).show();
-        Notification notification = new NotificationCompat.Builder(getActivity(), App.CHANNEL_1_ID)
-                .setSmallIcon(R.drawable.ic_notifications)
-                .setContentTitle("Event Alarm")
-                .setContentText("event alarm here!")
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
-                .build();
-        notificationManager = NotificationManagerCompat.from(getActivity());
-        notificationManager.notify(1, notification);
-    }
     CardView selectedView = null;
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
@@ -246,6 +234,27 @@ public class CalendarFrag extends Fragment {
                 }
             });
             deleteConfirmation.create().show();
+        }
+        if(item.getItemId()==R.id.navEvent){
+            Context context = getContext();
+            SQLiteDatabase sqLiteDatabase = context.openOrCreateDatabase("events", Context.MODE_PRIVATE, null);
+            DBHelper dbHelper = new DBHelper(sqLiteDatabase);
+            TextView textView = (TextView) selectedView.getChildAt(0);
+            String eventName = textView.getText().toString().split("\n")[0];
+            String startTime = textView.getText().toString().split("\n")[3];
+            String endTime = textView.getText().toString().split("\n")[4];
+            List<Event> eventList = dbHelper.selectEvent(eventName,startTime,endTime);
+            String location = eventList.get(0).getLocation();
+            if(TextUtils.isEmpty(location)){
+                Toast.makeText(getContext(),"Sorry! You haven't choose a location for the event!", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+            String lat = eventList.get(0).getLocation().split(",")[1];
+            String lon = eventList.get(0).getLocation().split(",")[2];
+            Uri gmmIntentUri = Uri.parse("google.navigation:q=" + lat + "," + lon+"&mode=w");
+            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+            mapIntent.setPackage("com.google.android.apps.maps");
+            startActivity(mapIntent);
         }
         return true;
     }
@@ -336,10 +345,13 @@ public class CalendarFrag extends Fragment {
 
         Log.d("Tet",event.getLocation());
         String loc=event.getLocation();
-        String[] str=loc.split(",");//
-        Double lat=Double.parseDouble(str[1]);
-        Double lon=Double.parseDouble(str[2]);
-        Log.d("Tet",lat+","+lon);
+        String[]str = {"","",""};
+        if(!TextUtils.isEmpty(loc)) {
+            str = loc.split(",");//
+            Double lat = Double.parseDouble(str[1]);
+            Double lon = Double.parseDouble(str[2]);
+            Log.d("Tet", lat + "," + lon);
+        }
 
         TextView eventText = new TextView(getContext());
         eventText.setText(String.format("%s\n\n%s\n%s\n%s",event.getEventName(),str[0],event.getStartTime(),event.getEndTime()));
@@ -354,6 +366,7 @@ public class CalendarFrag extends Fragment {
         eventCard.setAlpha(0.75F);
         eventCard.setLayoutParams(layoutParams);
 
+        String[] finalStr = str;
         eventCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -361,14 +374,14 @@ public class CalendarFrag extends Fragment {
                 Toast.makeText(getContext(),String.format(
                         "Event Name: %s\n\nEvent Location: %s\n\nStart Time: %s\n\nEnd Time: " +
                                 "%s\n\nParticipant: %s\n\nNotes: %s",event.getEventName(),
-                        str[0],event.getStartTime(),event.getEndTime(),
+                        finalStr[0],event.getStartTime(),event.getEndTime(),
                         event.getParticipant(), event.getNote()),Toast.LENGTH_SHORT)
                         .show();
 
-                Uri gmmIntentUri = Uri.parse("google.navigation:q=" + lat + "," + lon+"&mode=w");
-                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                mapIntent.setPackage("com.google.android.apps.maps");
-                startActivity(mapIntent);
+//                Uri gmmIntentUri = Uri.parse("google.navigation:q=" + lat + "," + lon+"&mode=w");
+//                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+//                mapIntent.setPackage("com.google.android.apps.maps");
+//                startActivity(mapIntent);
             }
         });
         weekDayCol.addView(eventCard);
