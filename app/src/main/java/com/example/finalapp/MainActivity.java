@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.finalapp.Calendar.CalendarFrag;
+import com.example.finalapp.Calendar.dao.Event;
 import com.example.finalapp.CountDown.CountdownFrag;
 import com.example.finalapp.Reminder.ReminderFrag;
 import com.example.finalapp.utils.NotificationReceiver;
@@ -45,11 +46,14 @@ public class MainActivity extends AppCompatActivity {
         navigationView.setOnItemSelectedListener(listener);
     }
 
-    public void setAlarm(String eventStart){
+    public int setAlarm(String eventStart, Integer weekDay, String eventName, String eventLocation){
         int hour = Integer.parseInt(eventStart.split(":")[0]);
         int minute = Integer.parseInt(eventStart.split(":")[1]);
 
         Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DATE, weekDay%7==0?1:weekDay%7+1);
+        hour = minute<10?hour-1:hour;
+        minute = minute<10?(60-(minute-10)):minute-10;
         calendar.set(Calendar.HOUR_OF_DAY, hour);
         calendar.set(Calendar.MINUTE,minute);
         calendar.set(Calendar.SECOND,0);
@@ -57,12 +61,26 @@ public class MainActivity extends AppCompatActivity {
 
         alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, NotificationReceiver.class);
+        intent.putExtra("eventName", eventName);
+        intent.putExtra("eventLocation", eventLocation);
         final int id = (int) System.currentTimeMillis();
         pendingIntent = PendingIntent.getBroadcast(this,id,intent,0);
         alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                60*1000,pendingIntent);
+                24 * 60 * 60 * 1000,pendingIntent);
 
-        Toast.makeText(this, "Alarm set", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Alarm set for "+calendar.get(Calendar.DAY_OF_WEEK), Toast.LENGTH_SHORT).show();
+
+        return id;
+    }
+
+    public void cancelAlarm(Event event){
+        Intent intent = new Intent(this, NotificationReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast(this,event.getAlarmId(),intent,0);
+        if(alarmManager==null){
+            alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        }
+        alarmManager.cancel(pendingIntent);
+        Toast.makeText(this,"Alarm Cancel for "+ event.getEventName()+" on "+event.getWeekDay(),Toast.LENGTH_SHORT).show();
     }
 
     private NavigationBarView.OnItemSelectedListener listener =

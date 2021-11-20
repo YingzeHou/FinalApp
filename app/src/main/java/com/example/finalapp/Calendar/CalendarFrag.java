@@ -1,5 +1,6 @@
 package com.example.finalapp.Calendar;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -43,6 +44,7 @@ import android.widget.Toast;
 import com.example.finalapp.App;
 import com.example.finalapp.Calendar.dao.Event;
 import com.example.finalapp.Calendar.enums.DayOfWeek;
+import com.example.finalapp.MainActivity;
 import com.example.finalapp.R;
 import com.example.finalapp.utils.DBHelper;
 import com.example.finalapp.utils.NotificationReceiver;
@@ -207,7 +209,13 @@ public class CalendarFrag extends Fragment {
                     .setPositiveButton("delete", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            List<Event> eventList = dbHelper.selectEvent(eventName,startTime,endTime);
+                            MainActivity mainActivity = (MainActivity) getActivity();
+                            for(Event e:eventList){
+                                mainActivity.cancelAlarm(e);
+                            }
                             dbHelper.deleteEvent(eventName,startTime,endTime);
+
                             FragmentManager fragmentManager = getParentFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                             fragmentTransaction.setCustomAnimations(R.anim.nav_default_enter_anim,R.anim.nav_default_exit_anim);

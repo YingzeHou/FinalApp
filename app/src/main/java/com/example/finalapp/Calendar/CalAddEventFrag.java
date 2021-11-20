@@ -358,8 +358,8 @@ public class CalAddEventFrag extends Fragment {
         mTimePicker = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                String selectedMinuteStr = selectedMinute==0?"00":String.valueOf(selectedMinute);
-                String selectedHourStr = selectedHour==0?"00":String.valueOf(selectedHour);
+                String selectedMinuteStr = selectedMinute<=9?"0"+selectedMinute:String.valueOf(selectedMinute);
+                String selectedHourStr = selectedHour<=9?"0"+selectedHour:String.valueOf(selectedHour);
                 timeView.setText( selectedHourStr + ":" + selectedMinuteStr);
             }
         }, hour, minute, true);//Yes 24 hour time
@@ -423,7 +423,6 @@ public class CalAddEventFrag extends Fragment {
         }
 
         MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.setAlarm(eventStart.getText().toString());
         String eColor = String.valueOf(mDefaultColor);
 
         Context context = getContext();
@@ -433,14 +432,16 @@ public class CalAddEventFrag extends Fragment {
 
         if(!update) {
             for(int d:weekDays){
-                dbHelper.saveEvent(eName,eColor,eNote,d,eStart,eEnd,eParticipant,eLocation, eRoom);
+                int alarmId = mainActivity.setAlarm(eventStart.getText().toString(), d, eName, eLocation);
+                dbHelper.saveEvent(eName,eColor,eNote,d,eStart,eEnd,eParticipant,eLocation, eRoom, alarmId);
             }
         }
         else{
             Toast.makeText(getContext(),"UPDATE", Toast.LENGTH_SHORT).show();
             dbHelper.deleteEvent(prevName,prevStart,prevEnd);
             for(int d:weekDays){
-                dbHelper.saveEvent(eName,eColor,eNote,d,eStart,eEnd,eParticipant,eLocation, eRoom);
+                int alarmId = mainActivity.setAlarm(eventStart.getText().toString(), d, eName, eLocation);
+                dbHelper.saveEvent(eName,eColor,eNote,d,eStart,eEnd,eParticipant,eLocation, eRoom, alarmId);
             }
         }
         FragmentManager fragmentManager = getParentFragmentManager();

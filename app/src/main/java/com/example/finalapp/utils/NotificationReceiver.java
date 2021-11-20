@@ -21,13 +21,15 @@ public class NotificationReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
+        String eventName = intent.getStringExtra("eventName");
+        String eventLocation = intent.getStringExtra("eventLocation");
         Intent calIntent = new Intent(context, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(context,0,calIntent,0);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, App.CHANNEL_1_ID)
                 .setSmallIcon(R.drawable.ic_notifications)
-                .setContentTitle("Event Alarm")
-                .setContentText("Event Navigation")
+                .setContentTitle(eventName+" in 10 minutes")
+                .setContentText("@ "+eventLocation)
                 .setAutoCancel(true)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)

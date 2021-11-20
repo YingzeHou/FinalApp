@@ -18,7 +18,7 @@ public class DBHelper {
     public void createTable(){
         sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS events"+
                 "(id INTEGER PRIMARY KEY, eventName TEXT, colorCode TEXT, weekDay INTEGER, note TEXT, " +
-                "startTime TEXT, endTime TEXT, participant TEXT, location TEXT, room TEXT)");
+                "startTime TEXT, endTime TEXT, participant TEXT, location TEXT, room TEXT, alarmId INTEGER)");
     }
 
     public ArrayList<Event> readEvents(){
@@ -34,6 +34,7 @@ public class DBHelper {
         int partInd = c.getColumnIndex("participant");
         int locInd = c.getColumnIndex("location");
         int roomInd = c.getColumnIndex("room");
+        int alarmInd = c.getColumnIndex("alarmId");
 
         c.moveToFirst();
         ArrayList<Event> eventList = new ArrayList<>();
@@ -48,8 +49,9 @@ public class DBHelper {
             String ePart = c.getString(partInd);
             String eLoc = c.getString(locInd);
             String eRoom = c.getString(roomInd);
+            int eAlarm = c.getInt(alarmInd);
 
-            Event event = new Event(eName,eColor,eDay,eNote,eStart,eEnd,ePart,eLoc, eRoom);
+            Event event = new Event(eName,eColor,eDay,eNote,eStart,eEnd,ePart,eLoc, eRoom, eAlarm);
             eventList.add(event);
             c.moveToNext();
         }
@@ -58,10 +60,10 @@ public class DBHelper {
         return eventList;
     }
 
-    public void saveEvent(String name, String color, String note, int day, String start, String end, String part, String loc, String room){
+    public void saveEvent(String name, String color, String note, int day, String start, String end, String part, String loc, String room, int alarmId){
         createTable();
-        sqLiteDatabase.execSQL(String.format("INSERT INTO events (eventName, colorCode, weekDay, note, startTime, endTime, participant, location, room)"+
-                "VALUES('%s', '%s', '%d', '%s', '%s', '%s', '%s', '%s', '%s')", name,color,day,note,start,end,part,loc, room));
+        sqLiteDatabase.execSQL(String.format("INSERT INTO events (eventName, colorCode, weekDay, note, startTime, endTime, participant, location, room, alarmId)"+
+                "VALUES('%s', '%s', '%d', '%s', '%s', '%s', '%s', '%s', '%s', '%d')", name,color,day,note,start,end,part,loc, room, alarmId));
     }
 
     public void deleteEvent(String name, String start, String end){
@@ -82,6 +84,7 @@ public class DBHelper {
             int partInd = c.getColumnIndex("participant");
             int locInd = c.getColumnIndex("location");
             int roomInd = c.getColumnIndex("room");
+            int alarmInd = c.getColumnIndex("alarmId");
 
             String colorCode = c.getString(colorInd);
             int weekDay = c.getInt(dayInd);
@@ -89,8 +92,9 @@ public class DBHelper {
             String participant = c.getString(partInd);
             String location = c.getString(locInd);
             String room = c.getString(roomInd);
+            int alarm = c.getInt(alarmInd);
 
-            eventList.add(new Event(name,colorCode,weekDay,note,start,end,participant,location, room));
+            eventList.add(new Event(name,colorCode,weekDay,note,start,end,participant,location, room, alarm));
             c.moveToNext();
         }
 
