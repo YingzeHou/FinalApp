@@ -1,13 +1,24 @@
 package com.example.finalapp;
 
+import android.Manifest;
 import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Build;
+import android.util.Log;
+
+import androidx.core.app.ActivityCompat;
+
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.GoogleMap;
 
 public class App extends Application {
 
     public static final String CHANNEL_1_ID = "alarmChannel";
+
 
     @Override
     public void onCreate() {

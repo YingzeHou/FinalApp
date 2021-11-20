@@ -90,6 +90,7 @@ public class ChooseLocFrag extends Fragment {
                 fragmentTransaction.setCustomAnimations(R.anim.nav_default_enter_anim,R.anim.nav_default_exit_anim);
 
                 CalAddEventFrag frag = (CalAddEventFrag) fragmentManager.getFragments().get(0);
+                frag.location=place.getName()+","+place.getLatLng().latitude+","+place.getLatLng().longitude;
                 frag.eventLocation.setText(place.getName());
                 fragmentManager.popBackStack();
             }

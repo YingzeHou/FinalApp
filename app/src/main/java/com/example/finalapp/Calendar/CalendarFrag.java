@@ -1,5 +1,6 @@
 package com.example.finalapp.Calendar;
 
+import android.Manifest;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Notification;
@@ -9,14 +10,19 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.location.Location;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
@@ -24,6 +30,8 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Gravity;
@@ -48,6 +56,14 @@ import com.example.finalapp.MainActivity;
 import com.example.finalapp.R;
 import com.example.finalapp.utils.DBHelper;
 import com.example.finalapp.utils.NotificationReceiver;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationAvailability;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabItem;
 
 import java.text.DateFormat;
@@ -318,8 +334,15 @@ public class CalendarFrag extends Fragment {
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(150,(int) (getResources().getDimension(R.dimen.hourBlockHeight)*timeSlotRatio));
         layoutParams.setMargins(20, (int) ((int) getResources().getDimension(R.dimen.hourBlockHeight)*timeStartRatio),10,0);
 
+        Log.d("Tet",event.getLocation());
+        String loc=event.getLocation();
+        String[] str=loc.split(",");//
+        Double lat=Double.parseDouble(str[1]);
+        Double lon=Double.parseDouble(str[2]);
+        Log.d("Tet",lat+","+lon);
+
         TextView eventText = new TextView(getContext());
-        eventText.setText(String.format("%s\n\n%s\n%s\n%s",event.getEventName(),event.getLocation(),event.getStartTime(),event.getEndTime()));
+        eventText.setText(String.format("%s\n\n%s\n%s\n%s",event.getEventName(),str[0],event.getStartTime(),event.getEndTime()));
         eventText.setTextColor(getResources().getColor(R.color.white));
         eventText.setTypeface(null, Typeface.BOLD);
         eventText.setPadding(5,5,5,0);
@@ -334,12 +357,18 @@ public class CalendarFrag extends Fragment {
         eventCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Toast.makeText(getContext(),String.format(
                         "Event Name: %s\n\nEvent Location: %s\n\nStart Time: %s\n\nEnd Time: " +
                                 "%s\n\nParticipant: %s\n\nNotes: %s",event.getEventName(),
-                        event.getLocation(),event.getStartTime(),event.getEndTime(),
+                        str[0],event.getStartTime(),event.getEndTime(),
                         event.getParticipant(), event.getNote()),Toast.LENGTH_SHORT)
                         .show();
+
+                Uri gmmIntentUri = Uri.parse("google.navigation:q=" + lat + "," + lon+"&mode=w");
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                startActivity(mapIntent);
             }
         });
         weekDayCol.addView(eventCard);

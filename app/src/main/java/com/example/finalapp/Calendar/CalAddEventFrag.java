@@ -60,6 +60,7 @@ import top.defaults.colorpicker.ColorPickerPopup;
  */
 public class CalAddEventFrag extends Fragment {
 
+    public String location="";
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -178,20 +179,6 @@ public class CalAddEventFrag extends Fragment {
                 saveEvent(view,mDefaultColor, update);
             }
         });
-
-//        LinearLayout toSearch=view.findViewById(R.id.toSearch);
-//        toSearch.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-////                startActivity(new Intent(getContext(),MapActivity.class));
-//                FragmentManager fragmentManager = getParentFragmentManager();
-//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//                fragmentTransaction.setCustomAnimations(R.anim.nav_default_enter_anim,R.anim.nav_default_exit_anim);
-//                fragmentTransaction.addToBackStack(null);
-//                Fragment fragment = new ChooseLocFrag();
-//                fragmentTransaction.replace(R.id.nav_fragment,fragment).commit();
-//            }
-//        });
         eventLocation=view.findViewById(R.id.eventLocation);
         eventLocation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -391,7 +378,7 @@ public class CalAddEventFrag extends Fragment {
         }
         String eNote = eventNote.getText()==null? "": eventNote.getText().toString();
         String eParticipant = eventParticipant.getText()==null?"":eventParticipant.getText().toString();
-        String eLocation = eventLocation.getText()==null?"":eventLocation.getText().toString();
+        String eLocation = location;//eventLocation.getText()==null?"":eventLocation.getText().toString();
         String eRoom = eventRoom.getText()==null?"":eventRoom.getText().toString();
 
         if(TextUtils.isEmpty(eventStart.getText())) {
