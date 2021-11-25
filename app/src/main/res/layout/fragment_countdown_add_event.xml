@@ -59,7 +59,7 @@
             </ImageView>
 
             <EditText
-                android:id="@+id/eventName2"
+                android:id="@+id/editContent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/ic_editText_margin"

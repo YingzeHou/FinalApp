@@ -39,6 +39,7 @@ class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         TextView v = (TextView) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.my_text_view, parent, false);
 
+        //
         int red[] = new int[]{0,30,60,90,120,150,180,210,240,255};
         int green[] = new int[]{0,30,60,90,120,150,180,210,240,255};
         int blue[] = new int[]{0,30,60,90,120,150,180,210,240,255};

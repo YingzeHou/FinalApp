@@ -2,9 +2,12 @@ package com.example.finalapp.CountDown;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +16,8 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -20,11 +25,17 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.finalapp.Calendar.CalendarFrag;
 import com.example.finalapp.Calendar.dao.CountdownEvent;
 import com.example.finalapp.R;
 import com.example.finalapp.CountDown.MyAdapter;
+import com.example.finalapp.CountDown.DBHelper;
 
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import top.defaults.colorpicker.ColorPickerPopup;
 
@@ -42,6 +53,9 @@ public class CountdownAddEventFrag extends Fragment {
     Calendar c;
     Button selectDate;
     int year, month, dayOfMonth;
+    private int mDefaultColor;
+    private boolean update=false;
+    EditText content;
 
 
     // TODO: Rename and change types of parameters
@@ -80,12 +94,14 @@ public class CountdownAddEventFrag extends Fragment {
 
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_countdown_add_event, container, false);
         ImageButton goBackBtn = view.findViewById(R.id.goBackBtn);
+        mDefaultColor=0;
         goBackBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,15 +113,13 @@ public class CountdownAddEventFrag extends Fragment {
             }
         });
 
+        content = (EditText) view.findViewById(R.id.editContent);
+
         Button saveButton = view.findViewById(R.id.saveButton);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fragmentManager = getParentFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.setCustomAnimations(R.anim.nav_default_enter_anim,R.anim.nav_default_exit_anim);
-                Fragment fragment = new CountdownFrag();
-                fragmentTransaction.replace(R.id.nav_fragment,fragment).commit();
+                onClickSaveEvent(v);
             }
         });
 
@@ -142,5 +156,17 @@ public class CountdownAddEventFrag extends Fragment {
         datePickerDialog.show();
     }
 
+    public void onClickSaveEvent(View view) {
+        Context context = this.getContext().getApplicationContext();
+        SQLiteDatabase sqLiteDatabase = context.openOrCreateDatabase("events", Context.MODE_PRIVATE,null);
+        DBHelper dbHelper = new DBHelper(sqLiteDatabase);
+        dbHelper.saveTodos(content.getText().toString(), selectDate.getText().toString());
+
+        FragmentManager fragmentManager = getParentFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.nav_default_enter_anim,R.anim.nav_default_exit_anim);
+        Fragment fragment = new CountdownFrag();
+        fragmentTransaction.replace(R.id.nav_fragment,fragment).commit();
+    }
 
 }

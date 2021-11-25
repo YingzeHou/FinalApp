@@ -62,6 +62,7 @@ public enum DayOfWeek {
                 return dayOfWeek;
             }
         }
-        throw new IllegalArgumentException(String.valueOf(code));
+        //throw new IllegalArgumentException(String.valueOf(code));
+        return null;
     }
 }

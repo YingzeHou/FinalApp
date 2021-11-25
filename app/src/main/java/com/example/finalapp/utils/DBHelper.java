@@ -3,6 +3,7 @@ package com.example.finalapp.utils;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.example.finalapp.Calendar.dao.CountdownEvent;
 import com.example.finalapp.Calendar.dao.Event;
 
 import java.util.ArrayList;

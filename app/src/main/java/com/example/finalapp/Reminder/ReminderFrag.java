@@ -106,8 +106,6 @@ public class ReminderFrag extends Fragment {
 
         recyclerView.setAdapter(mAdapter);
 
-
-
         timeLineModelList = new ArrayList<>();
 //        int size = name.length;
         int size = todos.size();
@@ -134,10 +132,6 @@ public class ReminderFrag extends Fragment {
 //        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(timeLineRecyclerView.getContext(), linearLayoutManager.getOrientation());
 //        timeLineRecyclerView.addItemDecoration(dividerItemDecoration);  //for divider
         timeLineRecyclerView.setAdapter(new TimeLineAdapter(context, timeLineModelList));
-
-
-
-
 
 
         SearchView searchView = view.findViewById(R.id.searchBar);

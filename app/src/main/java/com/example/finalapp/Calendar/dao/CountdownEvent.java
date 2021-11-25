@@ -2,56 +2,61 @@ package com.example.finalapp.Calendar.dao;
 
 public class CountdownEvent implements Comparable<CountdownEvent> {
 
-    private String eventName;
-    private String date;
-    private boolean past;   //true if the event is in the past, false if the event is in the future
+    private String name;
+    private int days;
+    private int weekDay;
+    private int past;   //true if the event is in the past, false if the event is in the future
 
-    public CountdownEvent(String eventName, String date, boolean past) {
-        this.eventName = eventName;
-        this.date = date;
+    public CountdownEvent(String eventName, int days, int weekDay, int past) {
+        this.name = eventName;
+        this.days = days;
+        this.weekDay = weekDay;
         this.past = past;
     }
 
     public String getEventName() {
-        return eventName;
+        return name;
     }
 
     public void setEventName(String eventName) {
-        this.eventName = eventName;
+        this.name = eventName;
     }
 
-    public String getDate() {
-        return date;
+    public int getDays() {
+        return days;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setDays(int days) {
+        this.days = days;
     }
 
-    public boolean getPast() {
+    public int getPast() {
         return past;
     }
 
-    public void setPast(boolean past){
+    public void setPast(int past){
         this.past = past;
+    }
+
+    public int getWeekDay() {
+        return weekDay;
+    }
+
+    public void setWeekDay(int weekDay) {
+        this.weekDay = weekDay;
     }
 
     @Override
     public String toString() {
         return "Event{" +
-                "eventName='" + eventName + '\'' +
-                ", date='" + date + '\'' +
+                "eventName='" + name + '\'' +
+                ", days='" + days + '\'' +
                 ", past='" + past + '\'' +
                 '}';
     }
 
     @Override
-    public int compareTo(CountdownEvent o) {
-        if(o.past == true){
-            return 1;
-        }
-        else{
-            return 0;
-        }
+    public int compareTo(CountdownEvent countdownEvent) {
+        return 0;
     }
 }

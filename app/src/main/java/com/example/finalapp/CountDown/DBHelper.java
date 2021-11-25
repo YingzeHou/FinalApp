@@ -1,4 +1,4 @@
-package com.example.finalapp.Reminder;
+package com.example.finalapp.CountDown;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -39,10 +39,10 @@ public class DBHelper {
         return todosList;
     }
 
-    public void saveTodos(String content, String date, String time) {
+    public void saveTodos(String content, String date) {
         createTable();
-        sqLiteDatabase.execSQL(String.format("INSERT INTO todos (content, date, time) " +
-                " VALUES ('%s', '%s', '%s')", content, date, time));
+        sqLiteDatabase.execSQL(String.format("INSERT INTO todos (content, date) " +
+                " VALUES ('%s', '%s')", content, date));
     }
 
 //    public void updateTodo(String content, String date, String time) {
@@ -56,5 +56,4 @@ public class DBHelper {
         createTable();
         sqLiteDatabase.execSQL(String.format("DELETE FROM todos"));
     }
-
 }
