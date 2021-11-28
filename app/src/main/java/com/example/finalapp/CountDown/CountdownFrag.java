@@ -1,7 +1,10 @@
 package com.example.finalapp.CountDown;
 
+import static android.provider.Settings.System.DATE_FORMAT;
+
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.os.Build;
@@ -28,12 +31,19 @@ import android.widget.Toast;
 import com.example.finalapp.R;
 import com.example.finalapp.utils.CountdownDBHelper;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.Calendar;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -54,8 +64,20 @@ public class CountdownFrag extends Fragment {
     private RecyclerView.LayoutManager layoutManager;
     private String[] myDataset;
     private MyAdapter.MyViewHolder[] viewHolders;
+    private Date eventDate,todayDate;
 
     public static ArrayList<Todo> todos = new ArrayList<>();
+
+    private RecyclerView timeLineRecyclerView;
+    String[] name = {"Event 1", "Event 2", "Event 3"};
+    String[] status = {"active", "inactive", "inactive"};
+    String[] description = {"Description 1","Description 2","Description 3"};
+    String[] time = {"11:00 PM", "10:03 AM", "10:03 PM"};
+
+    List<TimeLineModel> timeLineModelList;
+    TimeLineModel[] timeLineModel;
+    Context context;
+    LinearLayoutManager linearLayoutManager;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -105,7 +127,17 @@ public class CountdownFrag extends Fragment {
         Context context = this.getContext().getApplicationContext();
         SQLiteDatabase sqLiteDatabase = context.openOrCreateDatabase("events", Context.MODE_PRIVATE,null);
         DBHelper dbHelper = new DBHelper(sqLiteDatabase);
+
+        Context context1 = getActivity();
+        SharedPreferences settings = context1.getSharedPreferences("my_first_time", Context.MODE_PRIVATE);
+
+        if (settings.getBoolean("my_first_time", true)) {
+            dbHelper.saveTodos("school started","09/05/2021");
+            dbHelper.saveTodos("semester ends", "12/15/2021");
+            settings.edit().putBoolean("my_first_time", false).commit();
+        }
         todos = dbHelper.readTodos();
+
 
 
         addEventButton.setOnClickListener(new View.OnClickListener(){
@@ -142,90 +174,59 @@ public class CountdownFrag extends Fragment {
 
         recyclerView.setAdapter(mAdapter);
 
-//        for(CardView c:cardViewList){
-//            registerForContextMenu(c);
-//        }
+        timeLineModelList = new ArrayList<>();
+//        int size = name.length;
+        int size = todos.size();
+        timeLineModel = new TimeLineModel[size];
+        context = this.getContext();
+        linearLayoutManager = new LinearLayoutManager(this.getContext());
+        String curDate = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault()).format(new Date());
+
+        for (int i = size-1; i >= 0; i--) {
+            timeLineModel[i] = new TimeLineModel();
+            Todo todo = todos.get(i);
+            timeLineModel[i].setStatus("active");
+            timeLineModel[i].setDate(todo.getDate());
+            timeLineModelList.add(timeLineModel[i]);
+
+            String date = timeLineModel[i].getDate();
+            if (curDate.compareTo(date) < 0){   //future events
+                timeLineModel[i].setPast("false");
+                long diff = getDaysBetweenDates(curDate,date);
+                timeLineModel[i].setDescription(diff + " days until " + todo.getContent());
+            }
+            else {          //past events
+                timeLineModel[i].setPast("true");
+                long diff = getDaysBetweenDates(date, curDate);
+                timeLineModel[i].setDescription(todo.getContent() + " has been " + diff + " days");
+            }
+        }
+        timeLineRecyclerView = (RecyclerView) view.findViewById(R.id.listView);
+        timeLineRecyclerView.setLayoutManager(linearLayoutManager);
+        timeLineRecyclerView.setAdapter(new TimeLineAdapter(context, timeLineModelList));
 
         return view;
     }
 
-//    @RequiresApi(api = Build.VERSION_CODES.O)
-//    public List<CardView> setEventCard(ViewGroup viewGroup){
-//        List<CardView> cardViewList = new ArrayList<>();
-//        Context context = getContext();
-//        SQLiteDatabase sqLiteDatabase = context.openOrCreateDatabase("events", Context.MODE_PRIVATE,null);
-//
-//        CountdownDBHelper dbHelper = new CountdownDBHelper(sqLiteDatabase);
-//        ArrayList<CountdownEvent> eventList = dbHelper.readCountdownEvents();
-//
-//        Collections.sort(eventList);
-//
-//        for(CountdownEvent event:eventList){
-//            CountdownEvent prevEvent = getPrevEvent(eventList,event);
-//            CardView cardView = setEventCardHelper(viewGroup,event, prevEvent);
-//            cardViewList.add(cardView);
-//        }
-//        return cardViewList;
-//
-//    }
-//
-//    private CountdownEvent getPrevEvent(List<CountdownEvent> eventList, CountdownEvent event){
-//        CountdownEvent eventPrev = null;
-//        for(CountdownEvent event1:eventList) {
-//            if (event1.equals(event)) {
-//                return eventPrev;
-//            }
-//            else if(event1.getWeekDay()==event.getWeekDay()){
-//                eventPrev=event1;
-//            }
-//        }
-//        return eventPrev;
-//    }
-//
-//    @RequiresApi(api = Build.VERSION_CODES.O)
-//    private CardView setEventCardHelper(ViewGroup viewGroup, CountdownEvent event, CountdownEvent prevEvent){
-//        // Get Week Panel to draw
-//        int past = event.getPast();
-//        int day = event.getDays();
-//        int weekDay = event.getWeekDay();
-////        int weekPanelId = DayOfWeek.valueOf((weekDay+1)%7).getWeekPanelId();
-////        LinearLayout weekDayCol = (LinearLayout) viewGroup.findViewById(listView);
-//
-//        // Instantiate event card
-//        CardView eventCard = new CardView(getContext());
-//        //eventCard.setMinimumWidth(150);
-//
-//
-//        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(150,100);
-//        layoutParams.setMargins(20, 10,10,0);
-//
-//        TextView eventText = new TextView(getContext());
-//        eventText.setText(String.format("%s%s%d%s",event.getEventName()," has been ",event.getDays()));
-//        eventText.setTextColor(getResources().getColor(R.color.black));
-//        eventText.setTypeface(null, Typeface.BOLD);
-//        eventText.setPadding(5,5,5,0);
-//        eventText.setTextSize(10);
-//        eventText.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
-//        eventCard.addView(eventText);
-//        if (past == 1) {
-//            eventCard.setCardBackgroundColor(17170456);
-//        }
-//        else {
-//            eventCard.setCardBackgroundColor(17170459);
-//        }
-//        eventCard.setRadius(30);
-//        eventCard.setAlpha(0.75F);
-//        eventCard.setLayoutParams(layoutParams);
-//
-//        eventCard.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(getContext(), "something happens, need more implementation",Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//        recyclerView.addView(eventCard);
-//        return eventCard;
-//    }
+    public static final String DATE_FORMAT = "MM/dd/yyyy";
 
+    public static long getDaysBetweenDates(String start, String end) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.ENGLISH);
+        Date startDate, endDate;
+        long numberOfDays = 0;
+        try {
+            startDate = dateFormat.parse(start);
+            endDate = dateFormat.parse(end);
+            numberOfDays = getUnitBetweenDates(startDate, endDate, TimeUnit.DAYS);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return numberOfDays;
+    }
+
+    private static long getUnitBetweenDates(Date startDate, Date endDate, TimeUnit unit) {
+        long timeDiff = endDate.getTime() - startDate.getTime();
+        return unit.convert(timeDiff, TimeUnit.MILLISECONDS);
+    }
 
 }

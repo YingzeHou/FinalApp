@@ -13,4 +13,5 @@ public class Todo {
     public String getDate() { return date; }
 
     public String getContent() { return content; }
+
 }
