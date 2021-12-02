@@ -17,7 +17,12 @@ import com.example.finalapp.R;
 import com.github.vipulasri.timelineview.TimelineView;
 import com.google.android.material.card.MaterialCardView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 public class TimeLineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<TimeLineModel> timeLineModelList;
@@ -34,6 +39,8 @@ public class TimeLineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         GradientDrawable gd = new GradientDrawable();
         GradientDrawable gd2 = new GradientDrawable();
+        gd.setCornerRadius(100);
+        gd2.setCornerRadius(50);
         if (viewType == 1) {
             gd.setColor(Color.parseColor("#87CEFA"));   //blue
             gd2.setColor(Color.parseColor("#72005EFF"));
@@ -42,8 +49,6 @@ public class TimeLineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             gd.setColor(Color.parseColor("#FFB952"));   //orange
             gd2.setColor(Color.parseColor("#FF9800"));
         }
-        gd.setCornerRadius(100);
-        gd2.setCornerRadius(50);
         viewFuture.findViewById(R.id.card).setBackground(gd);
         viewFuture.findViewById(R.id.smallCard).setBackground(gd2);
         return new ViewHolder(viewFuture, viewType);
@@ -55,6 +60,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 //        ((ViewHolder) holder).textView.setText(timeLineModelList.get(position).getName());
         ((ViewHolder) holder).textViewDescription.setText(timeLineModelList.get(position).getDescription());
         ((ViewHolder)holder).textViewTime.setText(timeLineModelList.get(position).getDate());
+        ((ViewHolder)holder).textDays.setText(timeLineModelList.get(position).getDiff() + " Days");
 //        ((ViewHolder)holder).textViewAddress.setText(timeLineModelList.get(position).getAddress());
 
         if (timeLineModelList.get(position).getStatus().equals("inactive"))
@@ -80,8 +86,10 @@ public class TimeLineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private class ViewHolder extends RecyclerView.ViewHolder {
 
         TimelineView timelineView;
-        TextView textView, textViewDescription, textViewTime, textViewAddress;
+        TextView textView, textViewDescription, textViewTime, textViewAddress, textDays;
         MaterialCardView cardColor;
+
+        //long diff = getDiff();
 
         ViewHolder(View itemView, int viewType) {
             super(itemView);
@@ -91,8 +99,44 @@ public class TimeLineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             textViewTime = itemView.findViewById(R.id.date);
             textViewAddress = itemView.findViewById(R.id.address);
             timelineView.initLine(viewType);
-//            cardColor = itemView.findViewById(R.id.card);
-//            cardColor.setBackgroundColor(Color.parseColor("#FF9800"));
+            textDays = itemView.findViewById(R.id.days);
+            //textDays.setText(String.valueOf(diff) + " Days");
         }
    }
+
+    private long getDiff() {
+        TimeLineModel timeLineModel = new TimeLineModel();
+        String date = timeLineModel.getDate();
+        String curDate = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault()).format(new Date());
+
+        if (curDate.compareTo(date) < 0){   //future events
+            timeLineModel.setPast("false");
+            return(getDaysBetweenDates(curDate,date));
+        }
+        else {          //past events
+            timeLineModel.setPast("true");
+            return(getDaysBetweenDates(date, curDate));
+        }
+    }
+
+    public static final String DATE_FORMAT = "MM/dd/yyyy";
+
+    public static long getDaysBetweenDates(String start, String end) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.ENGLISH);
+        Date startDate, endDate;
+        long numberOfDays = 0;
+        try {
+            startDate = dateFormat.parse(start);
+            endDate = dateFormat.parse(end);
+            numberOfDays = getUnitBetweenDates(startDate, endDate, TimeUnit.DAYS);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return numberOfDays;
+    }
+
+    private static long getUnitBetweenDates(Date startDate, Date endDate, TimeUnit unit) {
+        long timeDiff = endDate.getTime() - startDate.getTime();
+        return unit.convert(timeDiff, TimeUnit.MILLISECONDS);
+    }
 }

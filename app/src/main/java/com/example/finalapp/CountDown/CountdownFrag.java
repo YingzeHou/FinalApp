@@ -123,8 +123,6 @@ public class CountdownFrag extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_countdown, container, false);
         addEventButton = view.findViewById(R.id.addEvent);
-        //ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.fragment_calendar, container, false);
-        //List<CardView> cardViewList = setEventCard(viewGroup);
 
         Context context = this.getContext().getApplicationContext();
         SQLiteDatabase sqLiteDatabase = context.openOrCreateDatabase("events", Context.MODE_PRIVATE,null);
@@ -139,7 +137,6 @@ public class CountdownFrag extends Fragment {
             settings.edit().putBoolean("my_first_time", false).commit();
         }
         todos = dbHelper.readTodos();
-
 
         addEventButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -202,12 +199,14 @@ public class CountdownFrag extends Fragment {
             if (curDate.compareTo(date) < 0){   //future events
                 timeLineModel[i].setPast("false");
                 long diff = getDaysBetweenDates(curDate,date);
-                timeLineModel[i].setDescription(diff + " days until " + todo.getContent());
+                timeLineModel[i].setDescription(todo.getContent().toUpperCase() + " in ");
+                timeLineModel[i].setDiff(String.valueOf(diff));
             }
             else {          //past events
                 timeLineModel[i].setPast("true");
                 long diff = getDaysBetweenDates(date, curDate);
-                timeLineModel[i].setDescription(todo.getContent() + " has been " + diff + " days");
+                timeLineModel[i].setDescription(todo.getContent().toUpperCase() + " has been ");
+                timeLineModel[i].setDiff(String.valueOf(diff));
             }
         }
 

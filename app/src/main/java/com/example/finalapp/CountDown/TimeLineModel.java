@@ -7,6 +7,7 @@ public class TimeLineModel {
     private String date;
     private String address;
     private String past;
+    private String diff;
 
     String getDescription() {
         return description;
@@ -50,5 +51,13 @@ public class TimeLineModel {
 
     public void setPast(String past) {
         this.past = past;
+    }
+
+    public String getDiff() {
+        return diff;
+    }
+
+    public void setDiff(String diff) {
+        this.diff = diff;
     }
 }
