@@ -23,14 +23,13 @@ public class DBHelper {
         Cursor c = sqLiteDatabase.rawQuery(String.format("SELECT * FROM todos"), null);
         int contentIndex = c.getColumnIndex("content");
         int dateIndex = c.getColumnIndex("date");
-        int timeIndex = c.getColumnIndex("time");
         c.moveToFirst();
         ArrayList<Todo> todosList = new ArrayList<>();
         while (!c.isAfterLast()) {
-            String time = c.getString(timeIndex);
             String date = c.getString(dateIndex);
             String content = c.getString(contentIndex);
-            Todo todo = new Todo(content, date, time);
+            String past = "true";
+            Todo todo = new Todo(content, date, past);
             todosList.add(todo);
             c.moveToNext();
         }
@@ -44,13 +43,6 @@ public class DBHelper {
         sqLiteDatabase.execSQL(String.format("INSERT INTO todos (content, date) " +
                 " VALUES ('%s', '%s')", content, date));
     }
-
-//    public void updateTodo(String content, String date, String time) {
-//        createTable();
-//        sqLiteDatabase.execSQL(String.format("UPDATE todos SET content = '%s', date = '%s', " +
-//                        "time = '%s' WHERE content = '%s' and username = '%s'",
-//                 date, content, title, username));
-//    }
 
     public void clearDatabase() {
         createTable();

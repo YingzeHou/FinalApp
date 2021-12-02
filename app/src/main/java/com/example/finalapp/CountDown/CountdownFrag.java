@@ -6,7 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -139,7 +141,6 @@ public class CountdownFrag extends Fragment {
         todos = dbHelper.readTodos();
 
 
-
         addEventButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -209,9 +210,12 @@ public class CountdownFrag extends Fragment {
                 timeLineModel[i].setDescription(todo.getContent() + " has been " + diff + " days");
             }
         }
+
+        TimeLineAdapter tla = new TimeLineAdapter(context, timeLineModelList);
+
         timeLineRecyclerView = (RecyclerView) view.findViewById(R.id.listView);
         timeLineRecyclerView.setLayoutManager(linearLayoutManager);
-        timeLineRecyclerView.setAdapter(new TimeLineAdapter(context, timeLineModelList));
+        timeLineRecyclerView.setAdapter(tla);
 
         return view;
     }

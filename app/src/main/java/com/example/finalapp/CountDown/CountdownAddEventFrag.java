@@ -56,6 +56,7 @@ public class CountdownAddEventFrag extends Fragment {
     private int mDefaultColor;
     private boolean update=false;
     EditText content;
+    EditText past;
 
 
     // TODO: Rename and change types of parameters

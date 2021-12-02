@@ -1,6 +1,7 @@
 package com.example.finalapp.CountDown;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
@@ -30,16 +31,21 @@ public class TimeLineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View viewFuture = LayoutInflater.from(parent.getContext()).inflate(R.layout.countdown_layout_future, parent, false);
-//        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_timeline_horizontal, parent, false);
-//        viewFuture.setBackgroundColor(Color.rgb(252, 255, 205));
-//        viewFuture.findViewById(R.id.card).setBackgroundColor(Color.rgb(205, 255, 253));
+
         GradientDrawable gd = new GradientDrawable();
-        if (viewType == 1)
-            gd.setColor(Color.rgb(205, 255, 253));
-        else
-            gd.setColor(Color.rgb(252, 255, 205));
-        gd.setCornerRadius(15);
+        GradientDrawable gd2 = new GradientDrawable();
+        if (viewType == 1) {
+            gd.setColor(Color.parseColor("#87CEFA"));   //blue
+            gd2.setColor(Color.parseColor("#72005EFF"));
+        }
+        else {
+            gd.setColor(Color.parseColor("#FFB952"));   //orange
+            gd2.setColor(Color.parseColor("#FF9800"));
+        }
+        gd.setCornerRadius(100);
+        gd2.setCornerRadius(50);
         viewFuture.findViewById(R.id.card).setBackground(gd);
+        viewFuture.findViewById(R.id.smallCard).setBackground(gd2);
         return new ViewHolder(viewFuture, viewType);
     }
 
@@ -81,8 +87,8 @@ public class TimeLineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             super(itemView);
             timelineView = itemView.findViewById(R.id.row_timeline_layout_time_marker);
             textView = itemView.findViewById(R.id.row_timeline_layout_text_view_name);
-            textViewDescription = itemView.findViewById(R.id.row_timeline_layout_text_view_description);
-            textViewTime = itemView.findViewById(R.id.row_timeline_layout_text_view_time);
+            textViewDescription = itemView.findViewById(R.id.event);
+            textViewTime = itemView.findViewById(R.id.date);
             textViewAddress = itemView.findViewById(R.id.address);
             timelineView.initLine(viewType);
 //            cardColor = itemView.findViewById(R.id.card);
