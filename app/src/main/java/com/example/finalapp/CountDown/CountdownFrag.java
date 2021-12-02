@@ -168,7 +168,15 @@ public class CountdownFrag extends Fragment {
         mAdapter = new MyAdapter(myDataset);
 
         for (int i = 0; i < todos.size(); i++) {
-            viewHolders[i] = (MyAdapter.MyViewHolder)mAdapter.onCreateViewHolder(recyclerView, 1);
+            String date = todos.get(i).getDate();
+            String curDate = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault()).format(new Date());
+            if (curDate.compareTo(date) < 0){   //future events
+                viewHolders[i] = (MyAdapter.MyViewHolder)mAdapter.onCreateViewHolder(recyclerView, 1);
+            }
+            else {          //past events
+                viewHolders[i] = (MyAdapter.MyViewHolder)mAdapter.onCreateViewHolder(recyclerView, 0);
+            }
+//            viewHolders[i] = (MyAdapter.MyViewHolder)mAdapter.onCreateViewHolder(recyclerView, 1);
             mAdapter.onBindViewHolder(viewHolders[i], i);
         }
 

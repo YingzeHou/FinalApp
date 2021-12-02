@@ -2,6 +2,7 @@ package com.example.finalapp.CountDown;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +31,15 @@ public class TimeLineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View viewFuture = LayoutInflater.from(parent.getContext()).inflate(R.layout.countdown_layout_future, parent, false);
 //        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_timeline_horizontal, parent, false);
-
+//        viewFuture.setBackgroundColor(Color.rgb(252, 255, 205));
+//        viewFuture.findViewById(R.id.card).setBackgroundColor(Color.rgb(205, 255, 253));
+        GradientDrawable gd = new GradientDrawable();
+        if (viewType == 1)
+            gd.setColor(Color.rgb(205, 255, 253));
+        else
+            gd.setColor(Color.rgb(252, 255, 205));
+        gd.setCornerRadius(15);
+        viewFuture.findViewById(R.id.card).setBackground(gd);
         return new ViewHolder(viewFuture, viewType);
     }
 
