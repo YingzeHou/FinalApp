@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,7 @@ import java.util.concurrent.TimeUnit;
 public class TimeLineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<TimeLineModel> timeLineModelList;
     private Context context;
+    private String[] mDataset;
 
     TimeLineAdapter(Context context, List<TimeLineModel> timeLineModelList) {
         this.timeLineModelList = timeLineModelList;
@@ -34,7 +36,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View viewFuture = LayoutInflater.from(parent.getContext()).inflate(R.layout.countdown_layout_future, parent, false);
 
         GradientDrawable gd = new GradientDrawable();
@@ -42,13 +44,18 @@ public class TimeLineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         gd.setCornerRadius(100);
         gd2.setCornerRadius(50);
         if (viewType == 1) {
+            //System.out.println("viewType isssssssssssssssssssssssss" + viewType);
             gd.setColor(Color.parseColor("#87CEFA"));   //blue
             gd2.setColor(Color.parseColor("#72005EFF"));
         }
-        else {
+        else {       //PROBLEM: viewType is wrong
+            //System.out.println("viewType issssssssssssssssssssssssssssss" + viewType);
             gd.setColor(Color.parseColor("#FFB952"));   //orange
             gd2.setColor(Color.parseColor("#FF9800"));
         }
+//        else{
+//            System.out.println("viewType isssssssssssssssssssssssss " + viewType);
+//        }
         viewFuture.findViewById(R.id.card).setBackground(gd);
         viewFuture.findViewById(R.id.smallCard).setBackground(gd2);
         return new ViewHolder(viewFuture, viewType);
@@ -58,7 +65,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 //        ((ViewHolder) holder).textView.setText(timeLineModelList.get(position).getName());
-        ((ViewHolder) holder).textViewDescription.setText(timeLineModelList.get(position).getDescription());
+        ((ViewHolder)holder).textViewDescription.setText(timeLineModelList.get(position).getDescription());
         ((ViewHolder)holder).textViewTime.setText(timeLineModelList.get(position).getDate());
         ((ViewHolder)holder).textDays.setText(timeLineModelList.get(position).getDiff() + " Days");
 //        ((ViewHolder)holder).textViewAddress.setText(timeLineModelList.get(position).getAddress());
@@ -71,6 +78,8 @@ public class TimeLineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 //            ((ViewHolder) holder).timelineView.setMarker(context.getDrawable(ic_check_circle_black_24dp));
 //            ((ViewHolder) holder).timelineView.setMarker(context.getDrawable(R.drawable.ic_baseline_check_circle_24));
             ((ViewHolder) holder).timelineView.setMarker(context.getDrawable(R.drawable.ic_marker_active));
+
+        //holder.textView.setText(mDataset[position]);
     }
 
     @Override
@@ -83,7 +92,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return timeLineModelList.size();
     }
 
-    private class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         TimelineView timelineView;
         TextView textView, textViewDescription, textViewTime, textViewAddress, textDays;

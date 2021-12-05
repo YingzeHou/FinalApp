@@ -33,6 +33,7 @@ import android.widget.Toast;
 import com.example.finalapp.R;
 import com.example.finalapp.utils.CountdownDBHelper;
 
+import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -62,10 +63,10 @@ public class CountdownFrag extends Fragment {
     //private List<CountdownEvent> eventList = new ArrayList<>();
 
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.Adapter tlAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private String[] myDataset;
-    private MyAdapter.MyViewHolder[] viewHolders;
+    private TimeLineAdapter.ViewHolder[] viewHolders;
     private Date eventDate,todayDate;
 
     public static ArrayList<Todo> todos = new ArrayList<>();
@@ -157,28 +158,13 @@ public class CountdownFrag extends Fragment {
 
         myDataset = new String[todos.size()];
 
-        viewHolders = new MyAdapter.MyViewHolder[todos.size()];
+        viewHolders = new TimeLineAdapter.ViewHolder[todos.size()];
 
         for (int i = 0; i < todos.size(); i++){
             myDataset[i] = String.format("%d. %s", i + 1, todos.get(i).getContent());
         }
 
-        mAdapter = new MyAdapter(myDataset);
-
-        for (int i = 0; i < todos.size(); i++) {
-            String date = todos.get(i).getDate();
-            String curDate = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault()).format(new Date());
-            if (curDate.compareTo(date) < 0){   //future events
-                viewHolders[i] = (MyAdapter.MyViewHolder)mAdapter.onCreateViewHolder(recyclerView, 1);
-            }
-            else {          //past events
-                viewHolders[i] = (MyAdapter.MyViewHolder)mAdapter.onCreateViewHolder(recyclerView, 0);
-            }
-//            viewHolders[i] = (MyAdapter.MyViewHolder)mAdapter.onCreateViewHolder(recyclerView, 1);
-            mAdapter.onBindViewHolder(viewHolders[i], i);
-        }
-
-        recyclerView.setAdapter(mAdapter);
+        recyclerView.setAdapter(new TimeLineAdapter(context, timeLineModelList));
 
         timeLineModelList = new ArrayList<>();
 //        int size = name.length;
@@ -210,11 +196,25 @@ public class CountdownFrag extends Fragment {
             }
         }
 
-        TimeLineAdapter tla = new TimeLineAdapter(context, timeLineModelList);
+        tlAdapter = new TimeLineAdapter(context, timeLineModelList);
+
+        for (int i = 0; i < todos.size(); i++) {
+            String date = todos.get(i).getDate();
+            String curDate2 = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault()).format(new Date());
+            if (curDate2.compareTo(date) < 0){   //future events
+                viewHolders[i] = (TimeLineAdapter.ViewHolder) tlAdapter.onCreateViewHolder(recyclerView, 1);
+                System.out.println("put viewType as 111111111111111111111111111111111111111111111");
+            }
+            else {          //past events
+                viewHolders[i] = (TimeLineAdapter.ViewHolder) tlAdapter.onCreateViewHolder(recyclerView, 0);
+                System.out.println("put viewType as 000000000000000000000000000000000000000000000");
+            }
+            tlAdapter.onBindViewHolder(viewHolders[i], i);
+        }
 
         timeLineRecyclerView = (RecyclerView) view.findViewById(R.id.listView);
         timeLineRecyclerView.setLayoutManager(linearLayoutManager);
-        timeLineRecyclerView.setAdapter(tla);
+        timeLineRecyclerView.setAdapter(tlAdapter);
 
         return view;
     }
