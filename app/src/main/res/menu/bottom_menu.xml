@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/archive"
-        android:title="Archive"
-        android:icon="@drawable/ic_archive"/>
+<!--    <item android:id="@+id/archive"-->
+<!--        android:title="Archive"-->
+<!--        android:icon="@drawable/ic_archive"/>-->
     <item android:id="@+id/reminder"
         android:title="Reminder"
         android:icon="@drawable/ic_reminder"/>
@@ -13,7 +13,7 @@
     <item android:id="@+id/countdown"
         android:title="Countdown"
         android:icon="@drawable/ic_countdown"/>
-    <item android:id="@+id/map"
-        android:title="Map"
-        android:icon="@drawable/ic_map"/>
+<!--    <item android:id="@+id/map"-->
+<!--        android:title="Map"-->
+<!--        android:icon="@drawable/ic_map"/>-->
 </menu>

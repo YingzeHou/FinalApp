@@ -235,6 +235,7 @@ public class CalAddEventFrag extends Fragment {
                 ((TextView) v.findViewById(R.id.eventEndTime)).setText(eventList.get(i).getEndTime());
                 prevEnd = eventList.get(i).getEndTime();
                 ((EditText) v.findViewById(R.id.eventLocation)).setText(eventList.get(i).getLocation());
+                ((EditText) v.findViewById(R.id.eventRoom)).setText(eventList.get(i).getRoom());
             }
             weekDays+=dayArray[eventList.get(i).getWeekDay()-1];
             if(i!=eventList.size()-1){
@@ -378,7 +379,7 @@ public class CalAddEventFrag extends Fragment {
         }
         String eNote = eventNote.getText()==null? "": eventNote.getText().toString();
         String eParticipant = eventParticipant.getText()==null?"":eventParticipant.getText().toString();
-        String eLocation = location;//eventLocation.getText()==null?"":eventLocation.getText().toString();
+        String eLocation = location==""?eventLocation.getText().toString():location;//eventLocation.getText()==null?"":eventLocation.getText().toString();
         String eRoom = eventRoom.getText()==null?"":eventRoom.getText().toString();
 
         if(TextUtils.isEmpty(eventStart.getText())) {

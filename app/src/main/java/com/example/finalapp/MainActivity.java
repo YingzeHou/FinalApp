@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                 24 * 60 * 60 * 1000,pendingIntent);
 
-        Toast.makeText(this, "Alarm set for "+id, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Alarm set for "+id, Toast.LENGTH_SHORT).show();
 
         return id;
     }
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         }
         System.out.println(alarmManager.toString());
         alarmManager.cancel(pendingIntent);
-        Toast.makeText(this,"Alarm Cancel for "+ event.getEventName()+" on "+event.getWeekDay(),Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this,"Alarm Cancel for "+ event.getEventName()+" on "+event.getWeekDay(),Toast.LENGTH_SHORT).show();
     }
 
     private NavigationBarView.OnItemSelectedListener listener =
@@ -94,9 +94,9 @@ public class MainActivity extends AppCompatActivity {
                     Fragment selectedFragment = new CalendarFrag();
 
                     switch (item.getItemId()){
-                        case R.id.archive:
-                            selectedFragment = new ArchiveFrag();
-                            break;
+//                        case R.id.archive:
+//                            selectedFragment = new ArchiveFrag();
+//                            break;
                         case R.id.reminder:
                             selectedFragment = new ReminderFrag();
                             break;
@@ -106,9 +106,9 @@ public class MainActivity extends AppCompatActivity {
                         case R.id.countdown:
                             selectedFragment = new CountdownFrag();
                             break;
-                        case R.id.map:
-                            selectedFragment = new MapFrag();
-                            break;
+//                        case R.id.map:
+//                            selectedFragment = new MapFrag();
+//                            break;
                     }
                     getSupportFragmentManager().beginTransaction().replace(R.id.nav_fragment,selectedFragment).commit();
                     return true;
