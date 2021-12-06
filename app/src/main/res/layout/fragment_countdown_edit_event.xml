@@ -23,7 +23,6 @@
             android:background="#00FFFFFF"
             android:backgroundTint="#00FFFFFF"
             >
-
         </ImageButton>
         <TextView
             android:layout_width="wrap_content"
@@ -41,7 +40,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -103,6 +102,17 @@
             android:background="#06B1FF"
             android:fontFamily="sans-serif-medium"
             android:text="SAVE"
+            android:textColor="#FFFFFF" />
+
+        <Button
+            android:id="@+id/deleteButton"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:background="#FB2626"
+            android:fontFamily="sans-serif-medium"
+            android:text="DELETE"
             android:textColor="#FFFFFF" />
 
     </LinearLayout>

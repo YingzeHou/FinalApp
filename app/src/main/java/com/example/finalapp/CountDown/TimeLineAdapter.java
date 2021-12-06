@@ -5,13 +5,21 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.finalapp.R;
@@ -89,6 +97,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         TimelineView timelineView;
         TextView textView, textViewDescription, textViewTime, textViewAddress, textDays;
+        CardView card;
 
         ViewHolder(View itemView, int viewType) {
             super(itemView);
@@ -99,6 +108,33 @@ public class TimeLineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             textViewAddress = itemView.findViewById(R.id.address);
             timelineView.initLine(viewType);
             textDays = itemView.findViewById(R.id.days);
+            card = (CardView) itemView.findViewById(R.id.card);
+
+            card.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Toast.makeText(itemView.getContext(), "Clicked Card...", Toast.LENGTH_LONG).show();
+                    AppCompatActivity activity = (AppCompatActivity) v.getContext();
+                    CountdownEditEventFrag fragment = new CountdownEditEventFrag();
+                    Bundle bundle = new Bundle();
+
+                    String eventName = String.valueOf(textViewDescription.getText());
+                    String eventDate = String.valueOf(textViewTime.getText());
+                    String end = eventName.substring(eventName.length()-4, eventName.length()-1);
+                    if (end.equalsIgnoreCase("een")){
+                        eventName = eventName.substring(0,eventName.length()-10);
+                    }
+                    else{
+                        eventName = eventName.substring(0,eventName.length()-4);
+                    }
+
+                    bundle.putString("event", eventName);
+                    bundle.putString("date", eventDate);
+                    fragment.setArguments(bundle);
+                    activity.getSupportFragmentManager().beginTransaction().replace(R.id.nav_fragment, fragment).addToBackStack(null).commit();
+                }
+            });
         }
+
     }
 }

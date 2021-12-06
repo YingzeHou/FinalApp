@@ -1,9 +1,13 @@
 package com.example.finalapp.CountDown;
 
+import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class DBHelper {
 
@@ -13,6 +17,10 @@ public class DBHelper {
         this.sqLiteDatabase = sqLiteDatabase;
     }
 
+    private static final String TABLE_NAME = "todos";
+    private static final String EventName = "content";
+    private static final String EventDate = "date";
+
     public void createTable() {
         sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS todos " +
                 "(id INTEGER PRIMARY KEY, content TEXT, date TEXT, time TEXT)");
@@ -20,7 +28,7 @@ public class DBHelper {
 
     public ArrayList<Todo> readTodos() {
         createTable();
-        Cursor c = sqLiteDatabase.rawQuery(String.format("SELECT * FROM todos"), null);
+        Cursor c = sqLiteDatabase.rawQuery(String.format("SELECT * FROM " + TABLE_NAME), null);
         int contentIndex = c.getColumnIndex("content");
         int dateIndex = c.getColumnIndex("date");
         c.moveToFirst();
@@ -38,14 +46,20 @@ public class DBHelper {
         return todosList;
     }
 
-    public void saveTodos(String content, String date) {
-        createTable();
-        sqLiteDatabase.execSQL(String.format("INSERT INTO todos (content, date) " +
-                " VALUES ('%s', '%s')", content, date));
+    public void saveTodos(String event, String date) {
+
+        ContentValues values = new ContentValues();
+        values.put(EventName, event.toUpperCase());
+        values.put(EventDate, date.toUpperCase());
+
+        sqLiteDatabase.insertWithOnConflict(TABLE_NAME, null, values,SQLiteDatabase.CONFLICT_REPLACE);
+        sqLiteDatabase.close();
     }
 
-    public void clearDatabase() {
-        createTable();
-        sqLiteDatabase.execSQL(String.format("DELETE FROM todos"));
+
+    public void deleteTodos(String event) {
+        sqLiteDatabase.execSQL("DELETE FROM todos WHERE content='"+event+"'");
+        sqLiteDatabase.close();
     }
+
 }
