@@ -11,23 +11,33 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.SearchView;
 
+import com.example.finalapp.MainActivity;
 import com.example.finalapp.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ReminderFrag extends Fragment {
-    private RecyclerView recyclerView;
+//    private RecyclerView recyclerView;
+    private ListView lv;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private String[] myDataset;
     private MyAdapter.MyViewHolder[] viewHolders;
+
+    private ArrayAdapter adapter;
 
     public static ArrayList<Todo> todos = new ArrayList<>();
 
@@ -73,16 +83,16 @@ public class ReminderFrag extends Fragment {
         DBHelper dbHelper = new DBHelper(sqLiteDatabase);
 //        dbHelper.clearDatabase();
         todos = dbHelper.readTodos();
-
-        recyclerView = (RecyclerView) view.findViewById(R.id.notesListView);
+        lv = view.findViewById(R.id.notesListView);
+//        recyclerView = (RecyclerView) view.findViewById(R.id.notesListView);
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
-        recyclerView.setHasFixedSize(true);
+//        recyclerView.setHasFixedSize(true);
 
         // use a linear layout manager
         layoutManager = new LinearLayoutManager(this.getContext());
-        recyclerView.setLayoutManager(layoutManager);
+//        recyclerView.setLayoutManager(layoutManager);
 
         // specify an adapter (see also next example)
         myDataset = new String[todos.size()];
@@ -97,14 +107,18 @@ public class ReminderFrag extends Fragment {
 //        myDataset[2] = "3. Review Material";
 //        myDataset[3] = "4. Buy some mushroom";
 //        myDataset[4] = "5. Continue develop reminder";
-        mAdapter = new MyAdapter(myDataset);
 
-        for (int i = 0; i < todos.size(); i++) {
-            viewHolders[i] = (MyAdapter.MyViewHolder) mAdapter.onCreateViewHolder(recyclerView, 1);
-            mAdapter.onBindViewHolder(viewHolders[i], i);
-        }
+//        mAdapter = new MyAdapter(myDataset);
+//
+//        for (int i = 0; i < todos.size(); i++) {
+//            viewHolders[i] = (MyAdapter.MyViewHolder) mAdapter.onCreateViewHolder(recyclerView, 1);
+//            mAdapter.onBindViewHolder(viewHolders[i], i);
+//        }
+//
+//        recyclerView.setAdapter(mAdapter);
 
-        recyclerView.setAdapter(mAdapter);
+        adapter = new ArrayAdapter(this.getContext(), android.R.layout.simple_list_item_1, myDataset);
+        lv.setAdapter(adapter);
 
         timeLineModelList = new ArrayList<>();
 //        int size = name.length;
@@ -123,6 +137,7 @@ public class ReminderFrag extends Fragment {
 //            timeLineModel[i].setDescription(description[i]);
             timeLineModel[i].setDescription(todo.getContent());
 //            timeLineModel[i].setTime(time[i]);
+            timeLineModel[i].setDate(todo.getDate());
             timeLineModel[i].setTime(todo.getTime());
             timeLineModel[i].setAddress("CS407\n@CS Building 1240");
             timeLineModelList.add(timeLineModel[i]);
@@ -137,6 +152,35 @@ public class ReminderFrag extends Fragment {
         SearchView searchView = view.findViewById(R.id.searchBar);
         searchView.setBackgroundColor(Color.rgb(163,201,192));
         searchView.setQueryHint("Search Todo");
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                adapter.getFilter().filter(s);
+                return false;
+            }
+        });
+//        searchView.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable editable) {
+//
+//            }
+//        });
+
 
         ImageButton addToDoButton = view.findViewById(R.id.addTodoButton);
         addToDoButton.setOnClickListener(new View.OnClickListener() {

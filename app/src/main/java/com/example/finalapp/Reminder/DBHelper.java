@@ -4,6 +4,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class DBHelper {
 
@@ -26,16 +27,31 @@ public class DBHelper {
         int timeIndex = c.getColumnIndex("time");
         c.moveToFirst();
         ArrayList<Todo> todosList = new ArrayList<>();
+        LinkedList<Todo> sortedTodos = new LinkedList<>();
         while (!c.isAfterLast()) {
             String time = c.getString(timeIndex);
             String date = c.getString(dateIndex);
             String content = c.getString(contentIndex);
             Todo todo = new Todo(content, date, time);
-            todosList.add(todo);
+            if (sortedTodos.size() == 0)
+                sortedTodos.add(todo);
+            else {
+                String toAddDateAndTime = todo.getDate() + todo.getTime();
+                for (int i = 0; i < sortedTodos.size(); i++) {
+                    String curDateAndTime = sortedTodos.get(i).getDate() + sortedTodos.get(i).getTime();
+                    if (toAddDateAndTime.compareTo(curDateAndTime) < 0) {
+                        sortedTodos.add(i, todo);
+                        break;
+                    }
+                }
+            }
             c.moveToNext();
         }
         c.close();
         sqLiteDatabase.close();
+        for (int i = 0; i < sortedTodos.size(); i++) {
+            todosList.add(sortedTodos.get(i));
+        }
         return todosList;
     }
 

@@ -37,7 +37,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         ((ViewHolder) holder).textView.setText(timeLineModelList.get(position).getName());
         ((ViewHolder) holder).textViewDescription.setText(timeLineModelList.get(position).getDescription());
-        ((ViewHolder)holder).textViewTime.setText(timeLineModelList.get(position).getTime());
+        ((ViewHolder)holder).textViewTime.setText(timeLineModelList.get(position).getDate() + " " + timeLineModelList.get(position).getTime());
         ((ViewHolder)holder).textViewAddress.setText(timeLineModelList.get(position).getAddress());
 
         if (timeLineModelList.get(position).getStatus().equals("inactive"))

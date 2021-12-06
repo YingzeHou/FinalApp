@@ -125,6 +125,13 @@
         android:orientation="horizontal"
         android:gravity="center_horizontal">
 
+<!--        <SearchView-->
+<!--            android:id="@+id/searchBar"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="center_vertical"-->
+<!--            android:gravity="center_vertical"/>-->
+
         <SearchView
             android:id="@+id/searchBar"
             android:layout_width="match_parent"
@@ -140,7 +147,16 @@
         android:orientation="horizontal"
         android:gravity="center_horizontal">
 
-        <androidx.recyclerview.widget.RecyclerView
+<!--        <androidx.recyclerview.widget.RecyclerView-->
+<!--            android:id="@+id/notesListView"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="175dp"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/textWelcomeUser" />-->
+
+        <ListView
             android:id="@+id/notesListView"
             android:layout_width="match_parent"
             android:layout_height="175dp"

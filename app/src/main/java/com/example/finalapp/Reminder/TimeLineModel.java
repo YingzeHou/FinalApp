@@ -5,6 +5,8 @@ public class TimeLineModel {
     private String status;
     private String description;
     private String address;
+    private String time;
+    private String date;
 
     String getTime() {
         return time;
@@ -14,11 +16,15 @@ public class TimeLineModel {
         this.time = time;
     }
 
-    private String time;
-
-    String getDescription() {
-        return description;
+    String getDate() {
+        return date;
     }
+
+    void setDate(String date) {
+        this.date = date;
+    }
+
+    String getDescription() { return description; }
 
     void setDescription(String description) {
         this.description = description;

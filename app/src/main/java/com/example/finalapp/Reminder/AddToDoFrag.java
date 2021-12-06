@@ -99,7 +99,7 @@ public class AddToDoFrag extends Fragment {
                 year = selectedYear;
                 month = selectedMonth + 1;
                 dayOfMonth = selectedDayOfMonth;
-                selectDate.setText(String.format("%02d/%02d/%02d", month, dayOfMonth, year));
+                selectDate.setText(String.format("%02d/%02d/%02d", year, month, dayOfMonth));
             }
         };
         int style = AlertDialog.THEME_HOLO_LIGHT;
