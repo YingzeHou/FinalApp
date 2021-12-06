@@ -46,19 +46,15 @@ public class DBHelper {
         return todosList;
     }
 
-    public void saveTodos(String event, String date) {
-
-        ContentValues values = new ContentValues();
-        values.put(EventName, event.toUpperCase());
-        values.put(EventDate, date.toUpperCase());
-
-        sqLiteDatabase.insertWithOnConflict(TABLE_NAME, null, values,SQLiteDatabase.CONFLICT_REPLACE);
-        sqLiteDatabase.close();
+    public void saveTodos(String content, String date) {
+        createTable();
+        sqLiteDatabase.execSQL(String.format("INSERT INTO todos (content, date) " +
+                " VALUES ('%s', '%s')", content.toUpperCase(), date.toUpperCase()));
     }
 
 
     public void deleteTodos(String event) {
-        sqLiteDatabase.execSQL("DELETE FROM todos WHERE content='"+event+"'");
+        sqLiteDatabase.execSQL("DELETE FROM todos WHERE content='"+event.toUpperCase()+"'");
         sqLiteDatabase.close();
     }
 
