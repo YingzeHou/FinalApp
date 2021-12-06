@@ -28,5 +28,24 @@
         android:layout_below="@id/addEvent"
         android:layout_marginTop="20dp" />
 
+    <TextView
+        android:id="@+id/countdown_title"
+        style="@style/Widget.AppCompat.TextView.SpinnerItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:background="#00FF0000"
+        android:fontFamily="casual"
+        android:text="Days Counter"
+        android:textColor="@color/black"
+        android:textSize="32dp"
+        android:textStyle="bold"
+        android:shadowColor="@color/quantum_bluegrey300"
+        android:shadowDx="15"
+        android:shadowDy="15"
+        android:shadowRadius="0.01"
+        android:typeface="normal" />
+
 
 </RelativeLayout>

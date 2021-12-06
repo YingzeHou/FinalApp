@@ -43,19 +43,16 @@ public class TimeLineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         GradientDrawable gd2 = new GradientDrawable();
         gd.setCornerRadius(100);
         gd2.setCornerRadius(50);
-        if (viewType == 1) {
-            //System.out.println("viewType isssssssssssssssssssssssss" + viewType);
+        if (viewType == 0) {    //future event
             gd.setColor(Color.parseColor("#87CEFA"));   //blue
             gd2.setColor(Color.parseColor("#72005EFF"));
-        }
-        else {       //PROBLEM: viewType is wrong
-            //System.out.println("viewType issssssssssssssssssssssssssssss" + viewType);
+        } else if (viewType == 1) { //past event
             gd.setColor(Color.parseColor("#FFB952"));   //orange
             gd2.setColor(Color.parseColor("#FF9800"));
+        } else {
+            System.out.println("viewType exception, please check value of viewType");
+            //something is wrong nothing should happen here
         }
-//        else{
-//            System.out.println("viewType isssssssssssssssssssssssss " + viewType);
-//        }
         viewFuture.findViewById(R.id.card).setBackground(gd);
         viewFuture.findViewById(R.id.smallCard).setBackground(gd2);
         return new ViewHolder(viewFuture, viewType);
@@ -64,27 +61,23 @@ public class TimeLineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-//        ((ViewHolder) holder).textView.setText(timeLineModelList.get(position).getName());
-        ((ViewHolder)holder).textViewDescription.setText(timeLineModelList.get(position).getDescription());
-        ((ViewHolder)holder).textViewTime.setText(timeLineModelList.get(position).getDate());
-        ((ViewHolder)holder).textDays.setText(timeLineModelList.get(position).getDiff() + " Days");
-//        ((ViewHolder)holder).textViewAddress.setText(timeLineModelList.get(position).getAddress());
-
-        if (timeLineModelList.get(position).getStatus().equals("inactive"))
-//            ((ViewHolder) holder).timelineView.setMarker(context.getDrawable(ic_remove_circle_outline_black_24dp));
-//            ((ViewHolder) holder).timelineView.setMarker(context.getDrawable(R.drawable.ic_baseline_remove_circle_outline_24));
-            ((ViewHolder) holder).timelineView.setMarker(context.getDrawable(R.drawable.ic_marker_inactive));
-        else
-//            ((ViewHolder) holder).timelineView.setMarker(context.getDrawable(ic_check_circle_black_24dp));
-//            ((ViewHolder) holder).timelineView.setMarker(context.getDrawable(R.drawable.ic_baseline_check_circle_24));
-            ((ViewHolder) holder).timelineView.setMarker(context.getDrawable(R.drawable.ic_marker_active));
-
-        //holder.textView.setText(mDataset[position]);
+        ((ViewHolder) holder).textViewDescription.setText(timeLineModelList.get(position).getDescription());
+        ((ViewHolder) holder).textViewTime.setText(timeLineModelList.get(position).getDate());
+        ((ViewHolder) holder).textDays.setText(timeLineModelList.get(position).getDiff() + " Days");
     }
 
     @Override
     public int getItemViewType(int position) {
-        return TimelineView.getTimeLineViewType(position, getItemCount());
+        if (timeLineModelList.get(position).getPast().equalsIgnoreCase( "false")){  //future event
+            return 0;
+        }
+        else if (timeLineModelList.get(position).getPast().equalsIgnoreCase("true")){
+            return 1;
+        }
+        else {  //shouldn't happen
+            System.out.println("something is wrongggggggg");
+            return TimelineView.getTimeLineViewType(position, getItemCount());
+        }
     }
 
     @Override
@@ -96,9 +89,6 @@ public class TimeLineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         TimelineView timelineView;
         TextView textView, textViewDescription, textViewTime, textViewAddress, textDays;
-        MaterialCardView cardColor;
-
-        //long diff = getDiff();
 
         ViewHolder(View itemView, int viewType) {
             super(itemView);
@@ -109,43 +99,6 @@ public class TimeLineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             textViewAddress = itemView.findViewById(R.id.address);
             timelineView.initLine(viewType);
             textDays = itemView.findViewById(R.id.days);
-            //textDays.setText(String.valueOf(diff) + " Days");
         }
-   }
-
-    private long getDiff() {
-        TimeLineModel timeLineModel = new TimeLineModel();
-        String date = timeLineModel.getDate();
-        String curDate = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault()).format(new Date());
-
-        if (curDate.compareTo(date) < 0){   //future events
-            timeLineModel.setPast("false");
-            return(getDaysBetweenDates(curDate,date));
-        }
-        else {          //past events
-            timeLineModel.setPast("true");
-            return(getDaysBetweenDates(date, curDate));
-        }
-    }
-
-    public static final String DATE_FORMAT = "MM/dd/yyyy";
-
-    public static long getDaysBetweenDates(String start, String end) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.ENGLISH);
-        Date startDate, endDate;
-        long numberOfDays = 0;
-        try {
-            startDate = dateFormat.parse(start);
-            endDate = dateFormat.parse(end);
-            numberOfDays = getUnitBetweenDates(startDate, endDate, TimeUnit.DAYS);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return numberOfDays;
-    }
-
-    private static long getUnitBetweenDates(Date startDate, Date endDate, TimeUnit unit) {
-        long timeDiff = endDate.getTime() - startDate.getTime();
-        return unit.convert(timeDiff, TimeUnit.MILLISECONDS);
     }
 }

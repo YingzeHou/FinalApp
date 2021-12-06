@@ -165,14 +165,15 @@ public class CountdownFrag extends Fragment {
         }
 
         recyclerView.setAdapter(new TimeLineAdapter(context, timeLineModelList));
-
         timeLineModelList = new ArrayList<>();
 //        int size = name.length;
         int size = todos.size();
         timeLineModel = new TimeLineModel[size];
         context = this.getContext();
         linearLayoutManager = new LinearLayoutManager(this.getContext());
-        String curDate = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault()).format(new Date());
+        String curDate = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault()).format(new Date());
+        tlAdapter = new TimeLineAdapter(context, timeLineModelList);
+
 
         for (int i = size-1; i >= 0; i--) {
             timeLineModel[i] = new TimeLineModel();
@@ -182,33 +183,26 @@ public class CountdownFrag extends Fragment {
             timeLineModelList.add(timeLineModel[i]);
 
             String date = timeLineModel[i].getDate();
+            String year = date.substring(6,10);
+            date = year + "/" + date.substring(0,5);
+
             if (curDate.compareTo(date) < 0){   //future events
                 timeLineModel[i].setPast("false");
                 long diff = getDaysBetweenDates(curDate,date);
                 timeLineModel[i].setDescription(todo.getContent().toUpperCase() + " in ");
                 timeLineModel[i].setDiff(String.valueOf(diff));
+                viewHolders[i] = (TimeLineAdapter.ViewHolder) tlAdapter.onCreateViewHolder(recyclerView, 0);
             }
             else {          //past events
                 timeLineModel[i].setPast("true");
                 long diff = getDaysBetweenDates(date, curDate);
                 timeLineModel[i].setDescription(todo.getContent().toUpperCase() + " has been ");
                 timeLineModel[i].setDiff(String.valueOf(diff));
+                viewHolders[i] = (TimeLineAdapter.ViewHolder) tlAdapter.onCreateViewHolder(recyclerView, 1);
             }
         }
 
-        tlAdapter = new TimeLineAdapter(context, timeLineModelList);
-
-        for (int i = 0; i < todos.size(); i++) {
-            String date = todos.get(i).getDate();
-            String curDate2 = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault()).format(new Date());
-            if (curDate2.compareTo(date) < 0){   //future events
-                viewHolders[i] = (TimeLineAdapter.ViewHolder) tlAdapter.onCreateViewHolder(recyclerView, 1);
-                System.out.println("put viewType as 111111111111111111111111111111111111111111111");
-            }
-            else {          //past events
-                viewHolders[i] = (TimeLineAdapter.ViewHolder) tlAdapter.onCreateViewHolder(recyclerView, 0);
-                System.out.println("put viewType as 000000000000000000000000000000000000000000000");
-            }
+        for (int i = 0; i<size; i++){
             tlAdapter.onBindViewHolder(viewHolders[i], i);
         }
 
@@ -219,7 +213,7 @@ public class CountdownFrag extends Fragment {
         return view;
     }
 
-    public static final String DATE_FORMAT = "MM/dd/yyyy";
+    public static final String DATE_FORMAT = "yyyy/MM/dd";
 
     public static long getDaysBetweenDates(String start, String end) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.ENGLISH);
