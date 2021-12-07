@@ -1,153 +1,102 @@
 package com.example.finalapp.Reminder;
 
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Adapter;
+import android.view.ViewGroup;;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SearchView;
-
-import com.example.finalapp.MainActivity;
+import android.widget.TextView;
 import com.example.finalapp.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class ReminderFrag extends Fragment {
-//    private RecyclerView recyclerView;
     private ListView lv;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private String[] myDataset;
     private MyAdapter.MyViewHolder[] viewHolders;
-
-    private ArrayAdapter adapter;
-
     public static ArrayList<Todo> todos = new ArrayList<>();
-
     private RecyclerView timeLineRecyclerView;
-    String[] name = {"Event 1", "Event 2", "Event 3"};
-    String[] status = {"active", "inactive", "inactive"};
-    String[] description = {"Description 1","Description 2","Description 3"};
-    String[] time = {"11:00 PM", "10:03 AM", "10:03 PM"};
 
     List<TimeLineModel> timeLineModelList;
     TimeLineModel[] timeLineModel;
     Context context;
     LinearLayoutManager linearLayoutManager;
 
+    Calendar c;
+
+    private NotificationManagerCompat notificationManager;
+    public static final String CHANNEL_1_ID = "alarmChannel";
+
     public ReminderFrag() {
         // Required empty public constructor
     }
 
-//    ArrayList<Todo> todos = new ArrayList<>();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_reminder, container, false);
-//        Todo a = new Todo("Write some code", "2021/11/8", "14:00");
-//        todos.add(a);
-//        todos.add(a);
-//        todos.add(a);
-//        todos.add(a);
-//        todos.add(a);
-//        ArrayList<String> displayNotes = new ArrayList<>();
-//        for (Todo todo : todos) {
-//            displayNotes.add(String.format("%s\n%s", todo.getTime(), todo.getDate()));
-//        }
-//
-//        ArrayAdapter adapter = new ArrayAdapter(this.getContext(), android.R.layout.simple_list_item_activated_1, displayNotes);
-//        ListView listView = (ListView) view.findViewById(R.id.notesListView);
-//        listView.setAdapter(adapter);
 
+        notificationManager = NotificationManagerCompat.from(this.getContext());
 
         Context context = this.getContext().getApplicationContext();
         SQLiteDatabase sqLiteDatabase = context.openOrCreateDatabase("todos", Context.MODE_PRIVATE,null);
         DBHelper dbHelper = new DBHelper(sqLiteDatabase);
-//        dbHelper.clearDatabase();
         todos = dbHelper.readTodos();
         lv = view.findViewById(R.id.notesListView);
-//        recyclerView = (RecyclerView) view.findViewById(R.id.notesListView);
-
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
-//        recyclerView.setHasFixedSize(true);
 
         // use a linear layout manager
         layoutManager = new LinearLayoutManager(this.getContext());
-//        recyclerView.setLayoutManager(layoutManager);
-
-        // specify an adapter (see also next example)
         myDataset = new String[todos.size()];
 
         viewHolders = new MyAdapter.MyViewHolder[todos.size()];
 
         for (int i = 0; i < todos.size(); i++) {
-            myDataset[i] = String.format("%d. %s", i + 1, todos.get(i).getContent());
+//            myDataset[i] = String.format("%d. %s", i + 1, todos.get(i).getContent());
+            myDataset[i] = todos.get(i).getContent();
         }
-//        myDataset[0] = "1. Go to Mendota";
-//        myDataset[1] = "2. Write 407";
-//        myDataset[2] = "3. Review Material";
-//        myDataset[3] = "4. Buy some mushroom";
-//        myDataset[4] = "5. Continue develop reminder";
 
-//        mAdapter = new MyAdapter(myDataset);
-//
-//        for (int i = 0; i < todos.size(); i++) {
-//            viewHolders[i] = (MyAdapter.MyViewHolder) mAdapter.onCreateViewHolder(recyclerView, 1);
-//            mAdapter.onBindViewHolder(viewHolders[i], i);
-//        }
-//
-//        recyclerView.setAdapter(mAdapter);
-
-        adapter = new ArrayAdapter(this.getContext(), android.R.layout.simple_list_item_1, myDataset);
-        lv.setAdapter(adapter);
-
-        timeLineModelList = new ArrayList<>();
-//        int size = name.length;
-        int size = todos.size();
-        timeLineModel = new TimeLineModel[size];
-        context = this.getContext();
-        linearLayoutManager = new LinearLayoutManager(this.getContext());
-
-        for (int i = 0; i < size; i++) {
-            timeLineModel[i] = new TimeLineModel();
-            Todo todo = todos.get(i);
-//            timeLineModel[i].setName(name[i]);
-            timeLineModel[i].setName(String.format("Todo%d", i + 1));
-//            timeLineModel[i].setStatus(status[i]);
-            timeLineModel[i].setStatus("active");
-//            timeLineModel[i].setDescription(description[i]);
-            timeLineModel[i].setDescription(todo.getContent());
-//            timeLineModel[i].setTime(time[i]);
-            timeLineModel[i].setDate(todo.getDate());
-            timeLineModel[i].setTime(todo.getTime());
-            timeLineModel[i].setAddress("CS407\n@CS Building 1240");
-            timeLineModelList.add(timeLineModel[i]);
-        }
-        timeLineRecyclerView = (RecyclerView) view.findViewById(R.id.timeLineView);
-        timeLineRecyclerView.setLayoutManager(linearLayoutManager);
-//        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(timeLineRecyclerView.getContext(), linearLayoutManager.getOrientation());
-//        timeLineRecyclerView.addItemDecoration(dividerItemDecoration);  //for divider
-        timeLineRecyclerView.setAdapter(new TimeLineAdapter(context, timeLineModelList));
-
+        lv.setAdapter(new ArrayAdapter(this.getContext(), android.R.layout.simple_list_item_1, myDataset) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                TextView v = (TextView) super.getView(position, convertView, parent);
+                if (position % 4 == 0)
+                    v.setBackgroundColor(Color.rgb(205, 255, 253));
+                else if (position % 4 == 1)
+                    v.setBackgroundColor(Color.rgb(252, 255, 205));
+                else if (position % 4 == 2)
+                    v.setBackgroundColor(Color.rgb(255, 229, 229));
+                else
+                    v.setBackgroundColor(Color.rgb(255, 175, 175));
+                return v;
+            }
+        });
 
         SearchView searchView = view.findViewById(R.id.searchBar);
         searchView.setBackgroundColor(Color.rgb(163,201,192));
@@ -160,26 +109,62 @@ public class ReminderFrag extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String s) {
-                adapter.getFilter().filter(s);
+                ((ArrayAdapter)lv.getAdapter()).getFilter().filter(s);
                 return false;
             }
         });
-//        searchView.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable editable) {
-//
-//            }
-//        });
+
+        Context finalContext = context;
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                searchView.clearFocus();
+                Bundle bundle = new Bundle();
+                for (int j = 0; j < myDataset.length; j++) {
+                    if (myDataset[j].compareTo((String) lv.getAdapter().getItem(i)) == 0) {
+                        bundle.putInt("todoId", j);
+                        break;
+                    }
+                }
+                FragmentManager fragmentManager = getParentFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.setCustomAnimations(R.anim.nav_default_enter_anim,R.anim.nav_default_exit_anim);
+                Fragment fragment = new EditTodoFrag();
+                fragment.setArguments(bundle);
+                fragmentTransaction.replace(R.id.nav_fragment,fragment).commit();
+            }
+        });
+
+        timeLineModelList = new ArrayList<>();
+        int size = todos.size();
+        timeLineModel = new TimeLineModel[size];
+        context = this.getContext();
+        linearLayoutManager = new LinearLayoutManager(this.getContext());
+
+        c = Calendar.getInstance();
+        for (int i = 0; i < size; i++) {
+            timeLineModel[i] = new TimeLineModel();
+            Todo todo = todos.get(i);
+            timeLineModel[i].setName(String.format("Todo%d", i + 1));
+            String curDate = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault()).format(new Date());
+            String curTime = String.format("%02d:%02d", c.get(Calendar.HOUR), c.get(Calendar.MINUTE));
+            String todoDateAndTime = todo.getDate() + todo.getTime();
+            if (todoDateAndTime.compareTo(curDate + curTime) < 0) {
+                timeLineModel[i].setStatus("active");
+            }
+            else
+                timeLineModel[i].setStatus("inactive");
+            if (todo.getDate().compareTo(curDate) == 0)
+                sendOnChannel1(view);
+            timeLineModel[i].setDescription(todo.getContent());
+            timeLineModel[i].setDate(todo.getDate());
+            timeLineModel[i].setTime(todo.getTime());
+            timeLineModel[i].setAddress("CS407\n@CS Building 1240");
+            timeLineModelList.add(timeLineModel[i]);
+        }
+        timeLineRecyclerView = (RecyclerView) view.findViewById(R.id.timeLineView);
+        timeLineRecyclerView.setLayoutManager(linearLayoutManager);
+        timeLineRecyclerView.setAdapter(new TimeLineAdapter(context, timeLineModelList));
 
 
         ImageButton addToDoButton = view.findViewById(R.id.addTodoButton);
@@ -195,6 +180,34 @@ public class ReminderFrag extends Fragment {
         });
 
         return view;
+    }
+
+    public void sendOnChannel1(View v) {
+        String title = "Made My Day";
+        String message = "You have some todos today!";
+        Intent activityIntent = new Intent(this.getContext(), ReminderFrag.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(this.getContext(),
+                0, activityIntent, 0);
+
+        Intent broadcastIntent = new Intent(this.getContext(), NotificationReceiver.class);
+        broadcastIntent.putExtra("toastMessage", message);
+        PendingIntent actionIntent = PendingIntent.getBroadcast(this.getContext(),
+                0, broadcastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Notification notification = new NotificationCompat.Builder(this.getContext(), CHANNEL_1_ID)
+                .setSmallIcon(R.drawable.ic_baseline_hourglass_bottom_24)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .setColor(Color.BLUE)
+                .setContentIntent(contentIntent)
+                .setAutoCancel(true)
+                .setOnlyAlertOnce(true)
+//                .addAction(R.mipmap.ic_launcher, "Toast", actionIntent)
+                .build();
+
+        notificationManager.notify(1, notification);
     }
 
 }

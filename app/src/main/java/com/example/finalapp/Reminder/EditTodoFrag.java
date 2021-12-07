@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
@@ -21,44 +20,55 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.example.finalapp.R;
-import com.example.finalapp.Reminder.ReminderFrag;
 
-import org.w3c.dom.Text;
-
+import java.util.ArrayList;
 import java.util.Calendar;
 
-public class AddToDoFrag extends Fragment {
 
-//    EditText selectDate;
-//    EditText selectTime;
+public class EditTodoFrag extends Fragment {
+
+    public EditTodoFrag() {
+        // Required empty public constructor
+    }
+
     TextView selectDate;
     TextView selectTime;
     EditText content;
     TextView saveTodo;
+    TextView deleteTodo;
     int hour, minute;
     int year, month, dayOfMonth;
     Calendar c;
-
-    public AddToDoFrag() {
-        // Required empty public constructor
-    }
+    int todoId;
+    Todo todo;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_add_to_do, container, false);
+        View view = inflater.inflate(R.layout.fragment_edit_todo, container, false);
+        ImageButton goToReminder = (ImageButton) view.findViewById(R.id.goToReminder2);
 
-        content = (EditText) view.findViewById(R.id.editContent);
-        saveTodo = (TextView) view.findViewById(R.id.saveTodo);
-        selectDate = (TextView) view.findViewById(R.id.selectDate);
-        selectTime = (TextView) view.findViewById(R.id.selectTime);
+        Bundle bundle = this.getArguments();
+        todoId = bundle.getInt("todoId");
 
+        Context context = this.getContext().getApplicationContext();
+        SQLiteDatabase sqLiteDatabase = context.openOrCreateDatabase("todos", Context.MODE_PRIVATE,null);
+        DBHelper dbHelper = new DBHelper(sqLiteDatabase);
+        ArrayList<Todo> todos = dbHelper.readTodos();
+        todo = todos.get(todoId);
 
-        ImageButton goToReminder = (ImageButton) view.findViewById(R.id.goToReminder);
+        content = (EditText) view.findViewById(R.id.editContent2);
+        content.setText(todo.getContent());
+        saveTodo = (TextView) view.findViewById(R.id.saveTodo2);
+        deleteTodo = (TextView) view.findViewById(R.id.deleteTodo);
+        selectDate = (TextView) view.findViewById(R.id.selectDate2);
+        selectDate.setText(todo.getDate());
+        selectTime = (TextView) view.findViewById(R.id.selectTime2);
+        selectTime.setText(todo.getTime());
+
         goToReminder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,7 +80,6 @@ public class AddToDoFrag extends Fragment {
                 fragmentTransaction.replace(R.id.nav_fragment,fragment).commit();
             }
         });
-
 
         selectDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,7 +96,13 @@ public class AddToDoFrag extends Fragment {
         saveTodo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onClickSaveTodo(view);
+                onClickUpdateTodo(view);
+            }
+        });
+        deleteTodo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickDeleteTodo(view);
             }
         });
 
@@ -132,7 +147,7 @@ public class AddToDoFrag extends Fragment {
         timePickerDialog.show();
     }
 
-    public void onClickSaveTodo(View view) {
+    public void onClickUpdateTodo(View view) {
         Context context = this.getContext().getApplicationContext();
         SQLiteDatabase sqLiteDatabase = context.openOrCreateDatabase("todos", Context.MODE_PRIVATE,null);
         DBHelper dbHelper = new DBHelper(sqLiteDatabase);
@@ -140,10 +155,20 @@ public class AddToDoFrag extends Fragment {
             content.setError("Please Input Content of Todo");
             return;
         }
-        int newId = (int) DatabaseUtils.queryNumEntries(sqLiteDatabase, "todos") + 1;
-//        int newId = dbHelper.getTodoCnt();
-        System.out.println(newId);
-        dbHelper.saveTodos(content.getText().toString(), selectDate.getText().toString(), selectTime.getText().toString(), Integer.toString(newId));
+        System.out.println(todo.getId());
+        dbHelper.updateTodo(content.getText().toString(), selectDate.getText().toString(), selectTime.getText().toString(), todo.getId());
+        FragmentManager fragmentManager = getParentFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.nav_default_enter_anim,R.anim.nav_default_exit_anim);
+        Fragment fragment = new ReminderFrag();
+        fragmentTransaction.replace(R.id.nav_fragment,fragment).commit();
+    }
+
+    public void onClickDeleteTodo(View view) {
+        Context context = this.getContext().getApplicationContext();
+        SQLiteDatabase sqLiteDatabase = context.openOrCreateDatabase("todos", Context.MODE_PRIVATE,null);
+        DBHelper dbHelper = new DBHelper(sqLiteDatabase);
+        dbHelper.deleteTodo(todo.getId());
         FragmentManager fragmentManager = getParentFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.nav_default_enter_anim,R.anim.nav_default_exit_anim);

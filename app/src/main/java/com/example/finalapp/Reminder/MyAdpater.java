@@ -3,14 +3,23 @@ package com.example.finalapp.Reminder;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 import com.example.finalapp.R;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
+import java.util.logging.LogRecord;
+
+class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> implements Filterable {
     private String[] mDataset;
     int i = 1;
+
+    @Override
+    public Filter getFilter() {
+        return null;
+    }
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
