@@ -222,7 +222,7 @@ public class EditTodoFrag extends Fragment {
                 editLocation.getText().toString() + "," + locationLat + "," + locationLon, todo.getId());
         else
             dbHelper.updateTodo(content.getText().toString(), selectDate.getText().toString(), selectTime.getText().toString(),
-                    editLocation.getText().toString(), todo.getId());
+                    todo.getLocation(), todo.getId());
         FragmentManager fragmentManager = getParentFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.nav_default_enter_anim,R.anim.nav_default_exit_anim);
