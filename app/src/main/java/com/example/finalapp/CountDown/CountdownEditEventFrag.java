@@ -73,6 +73,9 @@ public class CountdownEditEventFrag extends Fragment {
         if (bundle != null) {
             eventName = bundle.getString("event", null);
             eventDate = bundle.getString("date", null);
+            SQLiteDatabase sqLiteDatabase = getContext().openOrCreateDatabase("events", Context.MODE_PRIVATE,null);
+            DBHelper dbHelper = new DBHelper(sqLiteDatabase);
+            dbHelper.deleteTodos(eventName);
         }
 
         View view = inflater.inflate(R.layout.fragment_countdown_edit_event, container, false);

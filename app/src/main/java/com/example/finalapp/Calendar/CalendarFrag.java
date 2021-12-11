@@ -138,19 +138,19 @@ public class CalendarFrag extends Fragment {
         ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.fragment_calendar, container, false);
         setDateAndDay(viewGroup);
         List<CardView> cardViewList = setEventCard(viewGroup);
-        ImageButton calSettingBtn = (ImageButton) viewGroup.findViewById(R.id.calSetting);
+//        ImageButton calSettingBtn = (ImageButton) viewGroup.findViewById(R.id.calSetting);
         ImageButton calAddEventBtn = (ImageButton) viewGroup.findViewById(R.id.addEvent);
-        calSettingBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i("info","Click");
-                FragmentManager fragmentManager = getParentFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.setCustomAnimations(R.anim.nav_default_enter_anim,R.anim.nav_default_exit_anim);
-                Fragment fragment = new CalSettingFrag();
-                fragmentTransaction.replace(R.id.nav_fragment,fragment).addToBackStack(null).commit();
-            }
-        });
+//        calSettingBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.i("info","Click");
+//                FragmentManager fragmentManager = getParentFragmentManager();
+//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                fragmentTransaction.setCustomAnimations(R.anim.nav_default_enter_anim,R.anim.nav_default_exit_anim);
+//                Fragment fragment = new CalSettingFrag();
+//                fragmentTransaction.replace(R.id.nav_fragment,fragment).addToBackStack(null).commit();
+//            }
+//        });
 
         calAddEventBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -373,9 +373,9 @@ public class CalendarFrag extends Fragment {
 
                 Toast.makeText(getContext(),String.format(
                         "Event Name: %s\n\nEvent Location: %s\n\nStart Time: %s\n\nEnd Time: " +
-                                "%s\n\nParticipant: %s\n\nNotes: %s",event.getEventName(),
+                                "%s\n\nParticipant: %s\n\nNotes: %s\n\nRoom: %s",event.getEventName(),
                         finalStr[0],event.getStartTime(),event.getEndTime(),
-                        event.getParticipant(), event.getNote()),Toast.LENGTH_SHORT)
+                        event.getParticipant(), event.getNote(), event.getRoom()),Toast.LENGTH_SHORT)
                         .show();
 
 //                Uri gmmIntentUri = Uri.parse("google.navigation:q=" + lat + "," + lon+"&mode=w");

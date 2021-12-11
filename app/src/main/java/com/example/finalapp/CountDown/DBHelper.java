@@ -55,7 +55,7 @@ public class DBHelper {
 
     public void deleteTodos(String event) {
         sqLiteDatabase.execSQL("DELETE FROM todos WHERE content='"+event.toUpperCase()+"'");
-        sqLiteDatabase.close();
+//        sqLiteDatabase.close();
     }
 
 }

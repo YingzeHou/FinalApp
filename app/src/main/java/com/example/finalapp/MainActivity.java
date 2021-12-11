@@ -50,9 +50,10 @@ public class MainActivity extends AppCompatActivity {
     public int setAlarm(String eventStart, Integer weekDay, String eventName, String eventLocation){
         int hour = Integer.parseInt(eventStart.split(":")[0]);
         int minute = Integer.parseInt(eventStart.split(":")[1]);
-//        weekDay%7==0?1:weekDay%7+1
+        Toast.makeText(this,"set for "+weekDay,Toast.LENGTH_SHORT).show();
+        int dayOfWeek = weekDay%7==0?1:weekDay%7+1;
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        calendar.set(Calendar.DAY_OF_WEEK, dayOfWeek);
         hour = minute<10?hour-1:hour;
         minute = minute<10?(60-(minute-10)):minute-10;
         calendar.set(Calendar.HOUR_OF_DAY, hour);

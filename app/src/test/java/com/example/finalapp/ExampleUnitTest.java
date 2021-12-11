@@ -9,6 +9,8 @@ import static org.junit.Assert.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -38,6 +40,10 @@ public class ExampleUnitTest {
 
         //Read JSON response and print
         JSONObject myResponse = new JSONObject(response.toString());
-        System.out.println("temp- "+myResponse.getJSONObject("main").getDouble("feels_like"));
+        double temp = myResponse.getJSONObject("main").getDouble("feels_like")-273.15;
+        BigDecimal bd = new BigDecimal(temp).setScale(2, RoundingMode.HALF_UP);
+        temp = bd.doubleValue();
+        System.out.println("Weather: Feels like "+temp+"℃");
+//        return "Weather: Feels like "+temp+"℃";
     }
 }
