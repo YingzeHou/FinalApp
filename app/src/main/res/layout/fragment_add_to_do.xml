@@ -74,7 +74,7 @@
 
         <TextView
             android:id="@+id/textView2"
-            android:layout_width="53dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:text="Content"
@@ -111,7 +111,7 @@
 
         <TextView
             android:id="@+id/textView3"
-            android:layout_width="53dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:text="Date"
@@ -119,7 +119,7 @@
             android:textSize="15dp" />
 
         <Space
-            android:layout_width="30dp"
+            android:layout_width="57dp"
             android:layout_height="0dp" />
 
         <TextView
@@ -151,7 +151,7 @@
 
         <TextView
             android:id="@+id/textView4"
-            android:layout_width="53dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:text="Time"
@@ -159,7 +159,7 @@
             android:textSize="15dp" />
 
         <Space
-            android:layout_width="30dp"
+            android:layout_width="55dp"
             android:layout_height="0dp" />
 
         <TextView
@@ -179,26 +179,44 @@
 
     </LinearLayout>
 
-<!--    <Space-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="50dp" />-->
+    <Space
+        android:layout_width="0dp"
+        android:layout_height="15dp" />
 
-<!--    <LinearLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:gravity="center_horizontal"-->
-<!--        android:orientation="horizontal">-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:orientation="horizontal">
 
-<!--        <Button-->
-<!--            android:id="@+id/saveButton"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="SAVE" />-->
+        <TextView
+            android:id="@+id/todoLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="Location"
+            android:textColor="@color/black"
+            android:textSize="15dp" />
 
-<!--    </LinearLayout>-->
+        <Space
+            android:layout_width="30dp"
+            android:layout_height="0dp" />
 
-    <!--    <Space-->
-    <!--        android:layout_width="0dp"-->
-    <!--        android:layout_height="50dp" />-->
+        <TextView
+            android:id="@+id/chooseLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Choose the location"
+            android:textSize="15dp"
+            android:padding="10dp"
+            android:textStyle="bold|italic"
+            android:text=""
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:background="@drawable/textview_border"/>
+        <!--        android:ems="20"-->
+        <!--        android:onClick="onClickSelectTime"-->
+
+    </LinearLayout>
 
 </LinearLayout>

@@ -1,71 +1,42 @@
 package com.example.finalapp.Calendar;
 
-import android.Manifest;
-import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
 import android.graphics.Typeface;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
-import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.os.Handler;
-import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.ContextMenu;
-import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.finalapp.App;
 import com.example.finalapp.Calendar.dao.Event;
 import com.example.finalapp.Calendar.enums.DayOfWeek;
 import com.example.finalapp.MainActivity;
 import com.example.finalapp.R;
+import com.example.finalapp.Reminder.ReminderFrag;
 import com.example.finalapp.utils.DBHelper;
-import com.example.finalapp.utils.NotificationReceiver;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationAvailability;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.material.tabs.TabItem;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -73,7 +44,6 @@ import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -134,6 +104,14 @@ public class CalendarFrag extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+//        MainActivity.globalContext = new GlobalContext(this.getContext());
+//        ReminderFrag.CalendarContext = this.getContext();
+        Context context = getContext();
+        SQLiteDatabase sqLiteDatabase = context.openOrCreateDatabase("events", Context.MODE_PRIVATE, null);
+        ReminderFrag.dbHelper2 = new DBHelper(sqLiteDatabase);
+
+
         // Inflate the layout for this fragment
         ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.fragment_calendar, container, false);
         setDateAndDay(viewGroup);

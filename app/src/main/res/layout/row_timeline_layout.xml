@@ -10,12 +10,13 @@
 
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/firstCardView"
         android:layout_width="150dp"
         android:layout_height="match_parent"
         android:layout_gravity="center_vertical"
         app:cardBackgroundColor="@color/colorGrey50"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="5dp"
         app:contentPadding="15dp">
@@ -34,13 +35,13 @@
                 android:textSize="12sp"
                 tools:text="time of the todo"/>
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:id="@+id/row_timeline_layout_text_view_name"
-                android:textColor="@android:color/black"
-                tools:text="title of the todo"/>
+<!--            <androidx.appcompat.widget.AppCompatTextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="5dp"-->
+<!--                android:id="@+id/row_timeline_layout_text_view_name"-->
+<!--                android:textColor="@android:color/black"-->
+<!--                tools:text="title of the todo"/>-->
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="match_parent"
@@ -66,12 +67,13 @@
 
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/secondCardView"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="center_vertical"
         app:cardBackgroundColor="@color/colorGrey50"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         app:contentPadding="15dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="5dp">
@@ -92,13 +94,13 @@
                 tools:text="time of the todo"/>
 
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:id="@+id/asdzxc"
-                android:textColor="@android:color/black"
-                tools:text="detail of the todo"/>
+<!--            <androidx.appcompat.widget.AppCompatTextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="5dp"-->
+<!--                android:id="@+id/asdzxc"-->
+<!--                android:textColor="@android:color/black"-->
+<!--                tools:text="detail of the todo"/>-->
 
         </LinearLayout>
 
