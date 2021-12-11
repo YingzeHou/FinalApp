@@ -54,6 +54,7 @@ public class EditTodoFrag extends Fragment {
     Calendar c;
     int todoId;
     Todo todo;
+    boolean locationChanged;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -80,6 +81,7 @@ public class EditTodoFrag extends Fragment {
         selectTime = (TextView) view.findViewById(R.id.selectTime2);
         selectTime.setText(todo.getTime());
         editLocation = (TextView) view.findViewById(R.id.editLocation);
+        locationChanged = false;
         if (todo.getLocation().contains(","))
             editLocation.setText(todo.getLocation().split(",")[0]);
         else
@@ -151,6 +153,7 @@ public class EditTodoFrag extends Fragment {
             @Override
             public void onClick(View view) {
                 onClickChooseLocation(view);
+                locationChanged = true;
             }
         });
         return view;
@@ -214,8 +217,12 @@ public class EditTodoFrag extends Fragment {
             content.setError("Please Input Content of Todo");
             return;
         }
-        dbHelper.updateTodo(content.getText().toString(), selectDate.getText().toString(), selectTime.getText().toString(),
+        if(locationChanged)
+            dbHelper.updateTodo(content.getText().toString(), selectDate.getText().toString(), selectTime.getText().toString(),
                 editLocation.getText().toString() + "," + locationLat + "," + locationLon, todo.getId());
+        else
+            dbHelper.updateTodo(content.getText().toString(), selectDate.getText().toString(), selectTime.getText().toString(),
+                    editLocation.getText().toString(), todo.getId());
         FragmentManager fragmentManager = getParentFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.nav_default_enter_anim,R.anim.nav_default_exit_anim);
