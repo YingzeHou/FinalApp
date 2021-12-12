@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
@@ -15,16 +16,23 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.example.finalapp.Calendar.CalendarFrag;
+import com.example.finalapp.Calendar.dao.Event;
+import com.example.finalapp.MainActivity;
 import com.example.finalapp.R;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 
 public class EditTodoFrag extends Fragment {
@@ -33,8 +41,11 @@ public class EditTodoFrag extends Fragment {
         // Required empty public constructor
     }
 
+    public String locationLat;
+    public String locationLon;
     TextView selectDate;
     TextView selectTime;
+    TextView editLocation;
     EditText content;
     TextView saveTodo;
     TextView deleteTodo;
@@ -43,6 +54,7 @@ public class EditTodoFrag extends Fragment {
     Calendar c;
     int todoId;
     Todo todo;
+    boolean locationChanged;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -68,6 +80,23 @@ public class EditTodoFrag extends Fragment {
         selectDate.setText(todo.getDate());
         selectTime = (TextView) view.findViewById(R.id.selectTime2);
         selectTime.setText(todo.getTime());
+        editLocation = (TextView) view.findViewById(R.id.editLocation);
+        locationChanged = false;
+        if (todo.getLocation().contains(","))
+            editLocation.setText(todo.getLocation().split(",")[0]);
+        else
+            editLocation.setText(todo.getLocation());
+
+        if (todo.getIsEvent().compareTo("true") == 0) {
+            TextView editTodoPageTitle = (TextView) view.findViewById(R.id.editTodoPageTitle);
+            editTodoPageTitle.setText("View This Event");
+            ((ViewManager) saveTodo.getParent()).removeView(saveTodo);
+            ((ViewManager) deleteTodo.getParent()).removeView(deleteTodo);
+            for (int i = 0; i < todos.size(); i++) {
+                if (todos.get(i).getContent().compareTo(todo.getContent()) == 0 && todos.get(i).getDate().compareTo(todo.getDate()) > 0)
+                    selectDate.setText(todos.get(i).getDate());
+            }
+        }
 
         goToReminder.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,6 +109,7 @@ public class EditTodoFrag extends Fragment {
                 fragmentTransaction.replace(R.id.nav_fragment,fragment).commit();
             }
         });
+
 
         selectDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,11 +132,43 @@ public class EditTodoFrag extends Fragment {
         deleteTodo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onClickDeleteTodo(view);
+                AlertDialog.Builder deleteConfirmation = new AlertDialog.Builder(getContext());
+                deleteConfirmation.setTitle("Do you want to delete this todo?")
+                        .setMessage("Delete Confirmation")
+                        .setPositiveButton("delete", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                onClickDeleteTodo(view);
+                            }
+                        })
+                        .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        });
+                deleteConfirmation.create().show();
             }
         });
-
+        editLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickChooseLocation(view);
+                locationChanged = true;
+            }
+        });
         return view;
+    }
+
+    public void onClickChooseLocation(View view) {
+        Bundle bundle = new Bundle();
+        bundle.putString("type", "edit");
+        FragmentManager fragmentManager = getParentFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.nav_default_enter_anim,R.anim.nav_default_exit_anim);
+        fragmentTransaction.addToBackStack(null);
+        Fragment fragment = new com.example.finalapp.Reminder.ChooseLocFrag();
+        fragment.setArguments(bundle);
+        fragmentTransaction.add(R.id.nav_fragment,fragment).commit();
     }
 
     public void onClickSelectDate(View view) {
@@ -155,8 +217,12 @@ public class EditTodoFrag extends Fragment {
             content.setError("Please Input Content of Todo");
             return;
         }
-        System.out.println(todo.getId());
-        dbHelper.updateTodo(content.getText().toString(), selectDate.getText().toString(), selectTime.getText().toString(), todo.getId());
+        if(locationChanged)
+            dbHelper.updateTodo(content.getText().toString(), selectDate.getText().toString(), selectTime.getText().toString(),
+                editLocation.getText().toString() + "," + locationLat + "," + locationLon, todo.getId());
+        else
+            dbHelper.updateTodo(content.getText().toString(), selectDate.getText().toString(), selectTime.getText().toString(),
+                    todo.getLocation(), todo.getId());
         FragmentManager fragmentManager = getParentFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.nav_default_enter_anim,R.anim.nav_default_exit_anim);

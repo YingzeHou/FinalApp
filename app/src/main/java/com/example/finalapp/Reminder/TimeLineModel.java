@@ -7,6 +7,7 @@ public class TimeLineModel {
     private String address;
     private String time;
     private String date;
+    private String isEvent;
 
     String getTime() {
         return time;
@@ -53,4 +54,8 @@ public class TimeLineModel {
     public void setAddress(String address) {
         this.address = address;
     }
+
+    public String getIsEvent() { return isEvent; }
+
+    public void setIsEvent(String isEvent) { this.isEvent = isEvent; }
 }

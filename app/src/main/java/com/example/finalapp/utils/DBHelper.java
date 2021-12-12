@@ -57,7 +57,7 @@ public class DBHelper {
             c.moveToNext();
         }
         c.close();
-        sqLiteDatabase.close();
+//        sqLiteDatabase.close();
         return eventList;
     }
 

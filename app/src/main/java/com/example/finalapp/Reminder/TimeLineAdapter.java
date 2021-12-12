@@ -1,6 +1,8 @@
 package com.example.finalapp.Reminder;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.vipulasri.timelineview.TimelineView;
@@ -35,10 +38,18 @@ public class TimeLineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        ((ViewHolder) holder).textView.setText(timeLineModelList.get(position).getName());
+//        ((ViewHolder) holder).textView.setText(timeLineModelList.get(position).getName());
         ((ViewHolder) holder).textViewDescription.setText(timeLineModelList.get(position).getDescription());
         ((ViewHolder)holder).textViewTime.setText(timeLineModelList.get(position).getDate() + " " + timeLineModelList.get(position).getTime());
         ((ViewHolder)holder).textViewAddress.setText(timeLineModelList.get(position).getAddress());
+
+        if (timeLineModelList.get(position).getName().compareTo("true") == 0) {
+            ((ViewHolder) holder).cardView.setRadius(35);
+            ((ViewHolder) holder).cardView2.setRadius(35);
+        }
+        else {
+            ((ViewHolder) holder).textViewDescription.setTypeface(null, Typeface.BOLD);
+        }
 
         if (timeLineModelList.get(position).getStatus().equals("inactive"))
 //            ((ViewHolder) holder).timelineView.setMarker(context.getDrawable(ic_remove_circle_outline_black_24dp));
@@ -64,9 +75,12 @@ public class TimeLineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         TimelineView timelineView;
         TextView textView, textViewDescription, textViewTime, textViewAddress;
+        CardView cardView, cardView2;
 
         ViewHolder(View itemView, int viewType) {
             super(itemView);
+            cardView = itemView.findViewById(R.id.firstCardView);
+            cardView2 = itemView.findViewById(R.id.secondCardView);
             timelineView = itemView.findViewById(R.id.row_timeline_layout_time_marker);
             textView = itemView.findViewById(R.id.row_timeline_layout_text_view_name);
             textViewDescription = itemView.findViewById(R.id.row_timeline_layout_text_view_description);

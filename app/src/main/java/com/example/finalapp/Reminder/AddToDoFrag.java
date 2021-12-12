@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.finalapp.Calendar.ChooseLocFrag;
 import com.example.finalapp.R;
 import com.example.finalapp.Reminder.ReminderFrag;
 
@@ -32,10 +33,14 @@ import java.util.Calendar;
 
 public class AddToDoFrag extends Fragment {
 
-//    EditText selectDate;
+
+    //    EditText selectDate;
 //    EditText selectTime;
     TextView selectDate;
     TextView selectTime;
+    public String locationLat = "";
+    public String locationLon = "";
+    TextView chooseLocation;
     EditText content;
     TextView saveTodo;
     int hour, minute;
@@ -56,7 +61,7 @@ public class AddToDoFrag extends Fragment {
         saveTodo = (TextView) view.findViewById(R.id.saveTodo);
         selectDate = (TextView) view.findViewById(R.id.selectDate);
         selectTime = (TextView) view.findViewById(R.id.selectTime);
-
+        chooseLocation = (TextView) view.findViewById(R.id.chooseLocation);
 
         ImageButton goToReminder = (ImageButton) view.findViewById(R.id.goToReminder);
         goToReminder.setOnClickListener(new View.OnClickListener() {
@@ -90,8 +95,30 @@ public class AddToDoFrag extends Fragment {
                 onClickSaveTodo(view);
             }
         });
-
+        chooseLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickChooseLocation(view);
+//                System.out.println(chooseLocation.getText().toString());
+            }
+        });
+//        String place = getArguments().getString("data");
+//        if(!TextUtils.isEmpty(place)){
+//            chooseLocation.setText(place);
+//        }
         return view;
+    }
+
+    public void onClickChooseLocation(View view) {
+        Bundle bundle = new Bundle();
+        bundle.putString("type", "add");
+        FragmentManager fragmentManager = getParentFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.nav_default_enter_anim,R.anim.nav_default_exit_anim);
+        fragmentTransaction.addToBackStack(null);
+        Fragment fragment = new com.example.finalapp.Reminder.ChooseLocFrag();
+        fragment.setArguments(bundle);
+        fragmentTransaction.add(R.id.nav_fragment,fragment).commit();
     }
 
     public void onClickSelectDate(View view) {
@@ -142,8 +169,13 @@ public class AddToDoFrag extends Fragment {
         }
         int newId = (int) DatabaseUtils.queryNumEntries(sqLiteDatabase, "todos") + 1;
 //        int newId = dbHelper.getTodoCnt();
-        System.out.println(newId);
-        dbHelper.saveTodos(content.getText().toString(), selectDate.getText().toString(), selectTime.getText().toString(), Integer.toString(newId));
+//        System.out.println(newId);
+        if (TextUtils.isEmpty(chooseLocation.getText()))
+            dbHelper.saveTodos(content.getText().toString(), selectDate.getText().toString(), selectTime.getText().toString(),
+                    "no location info", "false", Integer.toString(newId));
+        else
+            dbHelper.saveTodos(content.getText().toString(), selectDate.getText().toString(), selectTime.getText().toString(),
+                chooseLocation.getText().toString() + "," + locationLat + "," + locationLon, "false", Integer.toString(newId));
         FragmentManager fragmentManager = getParentFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.nav_default_enter_anim,R.anim.nav_default_exit_anim);
