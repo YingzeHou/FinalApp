@@ -33,11 +33,6 @@ public class NotificationReceiver extends BroadcastReceiver {
 
         WeatherParser weatherParser = new WeatherParser();
         AsyncTask weatherTask = weatherParser.execute();
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         String eventName = intent.getStringExtra("eventName");
         String eventLocation = intent.getStringExtra("eventLocation");
         int id = intent.getIntExtra("alarmId",0);
