@@ -73,9 +73,6 @@ public class CountdownEditEventFrag extends Fragment {
         if (bundle != null) {
             eventName = bundle.getString("event", null);
             eventDate = bundle.getString("date", null);
-            SQLiteDatabase sqLiteDatabase = getContext().openOrCreateDatabase("events", Context.MODE_PRIVATE,null);
-            DBHelper dbHelper = new DBHelper(sqLiteDatabase);
-            dbHelper.deleteTodos(eventName);
         }
 
         View view = inflater.inflate(R.layout.fragment_countdown_edit_event, container, false);
@@ -148,6 +145,7 @@ public class CountdownEditEventFrag extends Fragment {
             Context context = this.getContext().getApplicationContext();
             SQLiteDatabase sqLiteDatabase = context.openOrCreateDatabase("events", Context.MODE_PRIVATE,null);
             DBHelper dbHelper = new DBHelper(sqLiteDatabase);
+            dbHelper.deleteTodos(eventName);
             dbHelper.saveTodos(content.getText().toString(), selectDate.getText().toString());
 
             Toast.makeText(content.getContext(), content.getText().toString() + " has been added", Toast.LENGTH_LONG).show();
